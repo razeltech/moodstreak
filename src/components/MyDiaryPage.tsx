@@ -681,11 +681,11 @@ export function MyDiaryPage() {
         </div>
 
         {/* Responsive Bento Grid Toolbar */}
-        <div className={cn("flex flex-wrap sm:flex-nowrap items-center justify-center sm:justify-between gap-1.5 sm:gap-2 p-1.5 rounded-2xl border bg-opacity-50 backdrop-blur-sm shadow-sm w-full", 
+        <div className={cn("flex flex-nowrap items-center justify-start sm:justify-between gap-1.5 sm:gap-2 p-1.5 rounded-2xl border bg-opacity-50 backdrop-blur-sm shadow-sm w-full overflow-x-auto hide-scrollbar", 
           isDarkMode ? "bg-stone-900/50 border-stone-800" : "bg-stone-50/50 border-stone-200")}>
             
           {/* Group 1: Core Tools */}
-          <div className="flex items-center gap-0.5 justify-center bg-white/40 p-1 rounded-xl border border-white/20">
+          <div className="flex items-center gap-0.5 justify-center bg-white/40 p-1 rounded-xl border border-white/20 shrink-0">
             <div className="relative group/tt">
               <button 
                 onClick={() => { setDrawingMode(false); setActiveTool('type'); }}
@@ -726,7 +726,7 @@ export function MyDiaryPage() {
           </div>
 
           {/* Group 2: Elements */}
-          <div className="flex items-center gap-0.5 justify-center bg-white/40 p-1 rounded-xl border border-white/20">
+          <div className="flex items-center gap-0.5 justify-center bg-white/40 p-1 rounded-xl border border-white/20 shrink-0">
             <div className="relative group/tt">
               <button onClick={() => setShowStickers(p => !p)} className={cn("p-2 rounded-lg transition-all", showStickers ? "text-white" : "text-stone-400 hover:bg-stone-100")} 
                       style={{ backgroundColor: showStickers ? 'var(--accent-color)' : undefined }}>
@@ -786,7 +786,7 @@ export function MyDiaryPage() {
           </div>
 
           {/* Group 3: Settings */}
-          <div className="flex items-center gap-0.5 justify-center sm:justify-center bg-white/40 p-1 rounded-xl border border-white/20">
+          <div className="flex items-center gap-0.5 justify-center sm:justify-center bg-white/40 p-1 rounded-xl border border-white/20 shrink-0">
             <div className="relative group/tt">
               <button 
                 onClick={() => { setShowMoods(!showMoods); setShowThemes(false); setShowPageConfig(false); }}
