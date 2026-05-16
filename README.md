@@ -44,6 +44,25 @@
 - **Bills & Insurance**: Secure vault for insurance policies, recurring bill reminders, and credit card payments.
 - **Streak System**: Stay motivated with a visual streak counter for consistent journaling.
 
+---
+
+## 📸 Life Vault & Finance
+
+MoodStreak now includes a comprehensive suite of life management tools, all kept private on your device.
+
+<div align="center">
+  <p><b>Health & Cycle Tracking</b></p>
+  <img src="docs/screenshots/health_vault.png" width="800" alt="Health Vault" />
+  <br />
+  <p><b>Personal Finance Log</b></p>
+  <img src="docs/screenshots/finance_log.png" width="800" alt="Finance Log" />
+  <br />
+  <p><b>Bills & Insurance Secure Vault</b></p>
+  <img src="docs/screenshots/bills_insurance.png" width="800" alt="Bills & Insurance" />
+</div>
+
+---
+
 ### 🔒 Privacy First
 - **Local Storage**: All data is stored securely on your device via **IndexedDB** (Dexie.js).
 - **Vault Lock**: Optional 4-digit PIN protection for your private entries.
