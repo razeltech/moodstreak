@@ -128,7 +128,7 @@ MoodStreak is an original series project by **RazelTech**, focused on building h
 <div align="center">
   <img src="docs/screenshots/branding.png" width="400" alt="RazelTech Branding" />
   <br />
-  <a href="https://razel.tech">Visit Razel.Tech</a>
+  <a href="https://razeltech.github.io/razeltech/">Visit Razel Tech</a>
 </div>
 
 ---
@@ -140,5 +140,5 @@ Distributed under the MIT License. See `LICENSE` for more information.
 ---
 
 <div align="center">
-  <sub>Built with ❤️ by <a href="https://razel.tech">RazelTech</a></sub>
+  <sub>Built with ❤️ by <a href="https://razeltech.github.io/razeltech/">RazelTech</a></sub>
 </div>
