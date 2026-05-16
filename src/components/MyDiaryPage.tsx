@@ -920,7 +920,7 @@ export function MyDiaryPage() {
             exit={{ y: -20, opacity: 0 }}
             className="bg-white/95 text-stone-800 backdrop-blur-md border-b border-stone-200 px-4 py-2 flex items-center justify-center gap-6 sticky top-[125px] sm:top-[73px] z-40 shadow-sm overflow-x-auto w-full no-scrollbar"
           >
-            <div className="flex items-center flex-nowrap w-max gap-6">
+          <div className="inline-flex items-center flex-nowrap w-fit min-w-full gap-6">
                
                {/* Pen Tool Settings */}
                {activeTool === 'pen' && (
@@ -1064,13 +1064,13 @@ export function MyDiaryPage() {
       </AnimatePresence>
 
       {/* Main Workspace */}
-      <div className={cn("flex-1 overflow-x-auto overflow-y-auto p-4 sm:p-8 pb-24 sm:pb-8 flex justify-start sm:justify-center items-start transition-colors bg-stone-200/30 touch-auto")}>
-        
-        <motion.div 
-          ref={pageRef}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="relative shadow-2xl border flex flex-col shrink-0 overflow-hidden rounded-sm mx-auto sm:mx-0"
+      <div className={cn("flex-1 overflow-x-auto overflow-y-auto p-4 sm:p-8 pb-24 sm:pb-8 transition-colors bg-stone-200/30 touch-auto scroll-smooth")}>
+        <div className="inline-flex flex-nowrap min-w-full w-fit justify-start sm:justify-center items-start min-h-full">
+          <motion.div 
+            ref={pageRef}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="relative shadow-2xl border flex flex-col shrink-0 overflow-hidden rounded-sm"
           style={{ 
              width: currentSize.width, 
              height: currentSize.height, 
@@ -1296,6 +1296,7 @@ export function MyDiaryPage() {
         </motion.div>
 
       </div>
+    </div>
     </div>
   );
 }
