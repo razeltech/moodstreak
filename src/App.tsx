@@ -16,6 +16,7 @@ import { PinLock } from './components/PinLock';
 import { cn } from './lib/utils';
 import { TrackersPage } from './components/TrackersPage';
 import { ShieldCheck } from 'lucide-react';
+import PWAInstallBanner from './components/PWAInstallBanner';
 
 export default function App() {
   const { activeTab, setActiveTab, currentDate, setCurrentDate, isFocusMode } = useStore();
@@ -266,6 +267,8 @@ export default function App() {
          <div className="w-px h-6 bg-[var(--border-color)]" />
          <button onClick={handleNextDay} className="text-ink-light hover:text-ink transition-colors"><ChevronRight size={24} /></button>
       </div>
+      
+      <PWAInstallBanner />
 
     </div>
     </>
