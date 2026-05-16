@@ -386,6 +386,24 @@ export function SettingsAndExport() {
 
           </div>
         </div>
+        
+        {/* Branding Footer */}
+        <div className="mt-16 pt-8 border-t border-ink/10 flex flex-col items-center gap-2 pb-12">
+           <div className="flex items-center gap-2 opacity-30">
+              <div className="w-8 h-px bg-ink" />
+              <span className="text-[10px] font-black uppercase tracking-[0.4em] text-ink">Original Series</span>
+              <div className="w-8 h-px bg-ink" />
+           </div>
+           <a 
+             href="https://razel.tech" 
+             target="_blank" 
+             rel="noopener noreferrer"
+             className="flex flex-col items-center group transition-all"
+           >
+              <span className="text-[10px] font-bold uppercase tracking-widest text-ink-light opacity-40 group-hover:opacity-100 transition-opacity">Designed & Developed by</span>
+              <span className="text-xl font-black tracking-tighter text-ink opacity-60 group-hover:text-rose-dark group-hover:opacity-100 transition-all" style={{ fontFamily: '"Outfit", sans-serif' }}>RazelTech</span>
+           </a>
+        </div>
       </div>
        
        <ConfirmationDialog 

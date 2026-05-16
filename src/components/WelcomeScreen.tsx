@@ -223,6 +223,11 @@ export function WelcomeScreen({ onComplete }: { onComplete: () => void }) {
           )}
         </AnimatePresence>
       </div>
+      
+      <div className="fixed bottom-8 left-0 right-0 flex flex-col items-center gap-1 opacity-40 pointer-events-none">
+         <span className="text-[10px] font-black uppercase tracking-[0.3em] text-[#7A7366]">Powered by</span>
+         <span className="text-[14px] font-black tracking-tight text-[#2C2C2C]" style={{ fontFamily: '"Outfit", sans-serif' }}>RazelTech</span>
+      </div>
     </div>
   );
 }

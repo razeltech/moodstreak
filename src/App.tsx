@@ -146,8 +146,17 @@ export default function App() {
             })}
           </div>
 
-          <div className="mt-auto pb-8 flex flex-col items-center">
-             {/* Decorative element or empty space */}
+          <div className="mt-auto pb-8 flex flex-col items-center gap-4">
+             <div className="w-8 h-px bg-[var(--border-color)] opacity-50" />
+             <a 
+               href="https://razel.tech" 
+               target="_blank" 
+               rel="noopener noreferrer"
+               className="flex flex-col items-center gap-1 group transition-all"
+             >
+                <span className="text-[10px] font-bold uppercase tracking-widest text-ink-light opacity-40 group-hover:opacity-100 transition-opacity">Powered by</span>
+                <span className="text-[11px] font-black tracking-tight text-ink opacity-60 group-hover:text-[var(--accent-color)] group-hover:opacity-100 transition-all" style={{ fontFamily: '"Outfit", sans-serif' }}>RazelTech</span>
+             </a>
           </div>
         </aside>
         )}
