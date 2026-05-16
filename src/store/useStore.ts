@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { format } from 'date-fns';
 
-type TabType = 'journal' | 'mood-grid' | 'planner' | 'settings' | 'export' | 'dashboard' | 'today';
+type TabType = 'journal' | 'mood-grid' | 'planner' | 'settings' | 'export' | 'dashboard' | 'today' | 'vault';
 
 interface AppState {
   currentDate: Date;

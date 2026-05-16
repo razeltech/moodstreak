@@ -61,17 +61,73 @@ export interface Settings {
   pageSizeId?: string;
 }
 
+export interface WeightLog {
+  id: string;
+  date: string;
+  weight: number;
+  unit: 'kg' | 'lbs';
+  notes?: string;
+}
+
+export interface CycleLog {
+  id: string;
+  date: string;
+  flow: 'none' | 'light' | 'medium' | 'heavy';
+  symptoms: string[];
+  mood: string;
+  notes?: string;
+}
+
+export interface ExpenseLog {
+  id: string;
+  date: string;
+  amount: number;
+  category: string;
+  description: string;
+}
+
+export interface InsuranceLog {
+  id: string;
+  provider: string;
+  policyName: string;
+  policyNumber: string;
+  expiryDate: string;
+  premium: number;
+  type: string;
+  notes?: string;
+}
+
+export interface RecurringPayment {
+  id: string;
+  name: string;
+  amount: number;
+  dueDate: string; // Day of month or specific date
+  frequency: 'monthly' | 'yearly' | 'weekly';
+  type: 'Insurance' | 'Credit Card' | 'Subscription' | 'Utility' | 'Other';
+  notes?: string;
+}
+
 class MoodStreakDB extends Dexie {
   entries!: EntityTable<Entry, 'id'>;
   settings!: EntityTable<Settings, 'id'>;
   tasks!: EntityTable<PlannerTask, 'id'>;
+  weightLogs!: EntityTable<WeightLog, 'id'>;
+  cycleLogs!: EntityTable<CycleLog, 'id'>;
+  expenseLogs!: EntityTable<ExpenseLog, 'id'>;
+  insuranceLogs!: EntityTable<InsuranceLog, 'id'>;
+  recurringPayments!: EntityTable<RecurringPayment, 'id'>;
 
   constructor() {
     super('FreshDiaryDB_v1');
     this.version(1).stores({
       entries: 'id, date, moodColor', // Indexed columns
       settings: 'id',
-      tasks: 'id, date'
+      tasks: 'id, date',
+      weightLogs: 'id, date',
+      cycleLogs: 'id, date',
+      expenseLogs: 'id, date, category',
+      insuranceLogs: 'id, provider, expiryDate',
+      recurringPayments: 'id, type, dueDate'
     });
   }
 }

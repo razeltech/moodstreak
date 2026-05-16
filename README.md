@@ -39,6 +39,9 @@
 ### 📊 Insights & Productivity
 - **Mood Tracking**: Log your daily emotions and visualize trends over time.
 - **Planner**: Integrated daily task manager to align your goals with your reflections.
+- **Life Vault**: Dedicated trackers for Weight, Menstrual Cycles, and Health metrics.
+- **Finance Log**: Minimalist monthly expense tracker with category breakdowns.
+- **Bills & Insurance**: Secure vault for insurance policies, recurring bill reminders, and credit card payments.
 - **Streak System**: Stay motivated with a visual streak counter for consistent journaling.
 
 ### 🔒 Privacy First

@@ -14,6 +14,8 @@ import { WelcomeScreen } from './components/WelcomeScreen';
 import { DashboardPage } from './components/DashboardPage';
 import { PinLock } from './components/PinLock';
 import { cn } from './lib/utils';
+import { TrackersPage } from './components/TrackersPage';
+import { ShieldCheck } from 'lucide-react';
 
 export default function App() {
   const { activeTab, setActiveTab, currentDate, setCurrentDate, isFocusMode } = useStore();
@@ -112,6 +114,7 @@ export default function App() {
               { id: 'dashboard', icon: BarChart3, label: 'Dashboard' },
               { id: 'today', icon: Grid, label: 'Today' },
               { id: 'mood-grid', icon: Calendar, label: 'Calendar' },
+              { id: 'vault', icon: ShieldCheck, label: 'Life Vault' },
               { id: 'planner', icon: ListTodo, label: 'Planner' },
               { id: 'settings', icon: Settings2, label: 'Settings' },
             ].map((tab) => {
@@ -184,6 +187,7 @@ export default function App() {
                  {activeTab === 'dashboard' && 'Insights'}
                  {activeTab === 'planner' && 'Planner'}
                  {activeTab === 'mood-grid' && 'Calendar'}
+                 {activeTab === 'vault' && 'Life Vault'}
                  {activeTab === 'settings' && 'Settings'}
                </span>
             </div>
@@ -211,6 +215,7 @@ export default function App() {
               {activeTab === 'dashboard' && <DashboardPage />}
               {activeTab === 'planner' && <PlannerPage />}
               {activeTab === 'mood-grid' && <MoodGrid />}
+              {activeTab === 'vault' && <TrackersPage />}
               {activeTab === 'settings' && <SettingsAndExport />}
             </motion.div>
           </AnimatePresence>
@@ -254,6 +259,7 @@ export default function App() {
          <div className="w-px h-6 bg-[var(--border-color)]" />
          <button onClick={() => setActiveTab('dashboard')} className={activeTab === 'dashboard' ? 'text-[var(--accent-color)] scale-110 drop-shadow-sm' : 'text-ink-light'}><BarChart3 size={24}/></button>
          <button onClick={() => setActiveTab('today')} className={activeTab === 'today' ? 'text-[var(--accent-color)] scale-110 drop-shadow-sm' : 'text-ink-light'}><Grid size={24}/></button>
+         <button onClick={() => setActiveTab('vault')} className={activeTab === 'vault' ? 'text-[var(--accent-color)] scale-110 drop-shadow-sm' : 'text-ink-light'}><ShieldCheck size={24}/></button>
          <button onClick={() => setActiveTab('planner')} className={activeTab === 'planner' ? 'text-[var(--accent-color)] scale-110 drop-shadow-sm' : 'text-ink-light'}><ListTodo size={24}/></button>
          <button onClick={() => setActiveTab('mood-grid')} className={activeTab === 'mood-grid' ? 'text-[var(--accent-color)] scale-110 drop-shadow-sm' : 'text-ink-light'}><Calendar size={24}/></button>
          <button onClick={() => setActiveTab('settings')} className={activeTab === 'settings' ? 'text-[var(--accent-color)] scale-110 drop-shadow-sm' : 'text-ink-light'}><Settings2 size={24}/></button>
