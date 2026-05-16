@@ -681,230 +681,231 @@ export function MyDiaryPage() {
         </div>
 
         {/* Responsive Bento Grid Toolbar */}
-        <div className={cn("flex flex-nowrap items-center justify-start sm:justify-between gap-1.5 sm:gap-2 p-1.5 rounded-2xl border bg-opacity-50 backdrop-blur-sm shadow-sm w-full overflow-x-auto hide-scrollbar", 
+        <div className={cn("rounded-2xl border bg-opacity-50 backdrop-blur-sm shadow-sm w-full overflow-x-auto touch-pan-x", 
           isDarkMode ? "bg-stone-900/50 border-stone-800" : "bg-stone-50/50 border-stone-200")}>
-            
-          {/* Group 1: Core Tools */}
-          <div className="flex items-center gap-0.5 justify-center bg-white/40 p-1 rounded-xl border border-white/20 shrink-0">
-            <div className="relative group/tt">
-              <button 
-                onClick={() => { setDrawingMode(false); setActiveTool('type'); }}
-                className={cn("p-2 rounded-lg transition-all", activeTool === 'type' ? (isDarkMode ? "bg-stone-100 text-stone-900" : "bg-stone-800 text-white") : "text-stone-400 hover:bg-stone-100")}
-              >
-                <Type size={16} />
-              </button>
-              <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 px-2 py-1 bg-ink text-white text-[10px] font-bold rounded shadow-xl opacity-0 group-hover/tt:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-[120]">Type Tool</div>
-            </div>
-            
-            <div className="relative group/tt">
-              <button 
-                onClick={() => { 
-                  setDrawingMode(true); 
-                  canvasRef.current?.eraseMode(false); 
-                  setActiveTool('pen'); 
-                }}
-                className={cn("p-2 rounded-lg transition-all", (activeTool === 'pen' && isDrawingMode) ? (isDarkMode ? "bg-stone-100 text-stone-900" : "bg-stone-800 text-white") : "text-stone-400 hover:bg-stone-100")}
-              >
-                <PenTool size={16} />
-              </button>
-              <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 px-2 py-1 bg-ink text-white text-[10px] font-bold rounded shadow-xl opacity-0 group-hover/tt:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-[120]">Pen Tool</div>
-            </div>
-
-            <div className="relative group/tt">
-              <button 
-                onClick={() => { 
-                  setDrawingMode(true); 
-                  canvasRef.current?.eraseMode(true); 
-                  setActiveTool('eraser');
-                }}
-                className={cn("p-2 rounded-lg transition-all", (activeTool === 'eraser' && isDrawingMode) ? (isDarkMode ? "bg-stone-100 text-stone-900" : "bg-stone-800 text-white") : "text-stone-400 hover:bg-stone-100")}
-              >
-                <Eraser size={16} />
-              </button>
-              <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 px-2 py-1 bg-ink text-white text-[10px] font-bold rounded shadow-xl opacity-0 group-hover/tt:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-[120]">Eraser</div>
-            </div>
-          </div>
-
-          {/* Group 2: Elements */}
-          <div className="flex items-center gap-0.5 justify-center bg-white/40 p-1 rounded-xl border border-white/20 shrink-0">
-            <div className="relative group/tt">
-              <button onClick={() => setShowStickers(p => !p)} className={cn("p-2 rounded-lg transition-all", showStickers ? "text-white" : "text-stone-400 hover:bg-stone-100")} 
-                      style={{ backgroundColor: showStickers ? 'var(--accent-color)' : undefined }}>
-                <Smile size={16} />
-              </button>
-              <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 px-2 py-1 bg-ink text-white text-[10px] font-bold rounded shadow-xl opacity-0 group-hover/tt:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-[120]">Stickers</div>
+          <div className="flex flex-nowrap items-center justify-start sm:justify-between gap-2 p-1.5 min-w-max sm:min-w-0 sm:w-full">
+            {/* Group 1: Core Tools */}
+            <div className="flex items-center gap-0.5 justify-center bg-white/40 p-1 rounded-xl border border-white/20 shrink-0">
+              <div className="relative group/tt">
+                <button 
+                  onClick={() => { setDrawingMode(false); setActiveTool('type'); }}
+                  className={cn("p-2 rounded-lg transition-all", activeTool === 'type' ? (isDarkMode ? "bg-stone-100 text-stone-900" : "bg-stone-800 text-white") : "text-stone-400 hover:bg-stone-100")}
+                >
+                  <Type size={16} />
+                </button>
+                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 px-2 py-1 bg-ink text-white text-[10px] font-bold rounded shadow-xl opacity-0 group-hover/tt:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-[120]">Type Tool</div>
+              </div>
               
-              <AnimatePresence>
-                {showStickers && (
-                   <motion.div 
-                     initial={{ opacity: 0, scale: 0.95, y: 10 }}
-                     animate={{ opacity: 1, scale: 1, y: 0 }}
-                     exit={{ opacity: 0, scale: 0.95, y: 10 }}
-                     className={cn("absolute top-[calc(100%+10px)] left-0 sm:left-auto sm:right-0 mt-2 shadow-2xl rounded-2xl p-4 z-[100] w-[280px] h-[350px] overflow-y-auto border", isDarkMode ? "bg-[#111216] border-stone-800" : "bg-white border-stone-200")}
-                   >
-                     <h3 className="text-xs font-bold uppercase tracking-widest mb-3 opacity-60">Stickers</h3>
-                     <div className="grid grid-cols-4 gap-2">
-                       {DECORATIVE_STICKERS.map(s => (
-                         <button
-                           key={s.id}
-                           onClick={() => addSticker(s.id)}
-                           className={cn("aspect-square p-2 rounded-lg transition-all flex items-center justify-center", isDarkMode ? "bg-stone-800 hover:bg-stone-700" : "bg-stone-50 hover:bg-stone-100")}
-                         >
-                           {s.component}
-                         </button>
-                       ))}
-                     </div>
-                   </motion.div>
-                )}
-              </AnimatePresence>
+              <div className="relative group/tt">
+                <button 
+                  onClick={() => { 
+                    setDrawingMode(true); 
+                    canvasRef.current?.eraseMode(false); 
+                    setActiveTool('pen'); 
+                  }}
+                  className={cn("p-2 rounded-lg transition-all", (activeTool === 'pen' && isDrawingMode) ? (isDarkMode ? "bg-stone-100 text-stone-900" : "bg-stone-800 text-white") : "text-stone-400 hover:bg-stone-100")}
+                >
+                  <PenTool size={16} />
+                </button>
+                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 px-2 py-1 bg-ink text-white text-[10px] font-bold rounded shadow-xl opacity-0 group-hover/tt:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-[120]">Pen Tool</div>
+              </div>
+
+              <div className="relative group/tt">
+                <button 
+                  onClick={() => { 
+                    setDrawingMode(true); 
+                    canvasRef.current?.eraseMode(true); 
+                    setActiveTool('eraser');
+                  }}
+                  className={cn("p-2 rounded-lg transition-all", (activeTool === 'eraser' && isDrawingMode) ? (isDarkMode ? "bg-stone-100 text-stone-900" : "bg-stone-800 text-white") : "text-stone-400 hover:bg-stone-100")}
+                >
+                  <Eraser size={16} />
+                </button>
+                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 px-2 py-1 bg-ink text-white text-[10px] font-bold rounded shadow-xl opacity-0 group-hover/tt:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-[120]">Eraser</div>
+              </div>
             </div>
 
-            <div className="relative group/tt">
-              <button 
-                onClick={addTextBox}
-                className="p-2 rounded-lg text-stone-400 hover:bg-stone-100"
-              >
-                <PlusSquare size={16} />
-              </button>
-              <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 px-2 py-1 bg-ink text-white text-[10px] font-bold rounded shadow-xl opacity-0 group-hover/tt:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-[120]">New Note</div>
-            </div>
-
-            <div className="relative group/tt">
-              <label className="cursor-pointer p-2 rounded-lg text-stone-400 hover:bg-stone-100 flex items-center justify-center">
-                <ImagePlus size={16} />
-                <input type="file" accept="image/*" onChange={handleImportImage} className="hidden" />
-              </label>
-              <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 px-2 py-1 bg-ink text-white text-[10px] font-bold rounded shadow-xl opacity-0 group-hover/tt:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-[120]">Photo</div>
-            </div>
-            
-            <div className="relative group/tt">
-               <button onClick={toggleVoice} className={cn("p-2 rounded-lg transition-all", isListening ? "bg-red-500 text-white animate-pulse" : "text-stone-400 hover:bg-stone-100")}>
-                 {isListening ? <Mic size={16} /> : <MicOff size={16} />}
-               </button>
-               <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 px-2 py-1 bg-ink text-white text-[10px] font-bold rounded shadow-xl opacity-0 group-hover/tt:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-[120]">Voice</div>
-            </div>
-          </div>
-
-          {/* Group 3: Settings */}
-          <div className="flex items-center gap-0.5 justify-center sm:justify-center bg-white/40 p-1 rounded-xl border border-white/20 shrink-0">
-            <div className="relative group/tt">
-              <button 
-                onClick={() => { setShowMoods(!showMoods); setShowThemes(false); setShowPageConfig(false); }}
-                className={cn("p-2 rounded-lg transition-all", showMoods ? "bg-stone-800 text-white" : "text-stone-400 hover:bg-stone-100")}
-              >
-                <span className="text-[14px] leading-none">{mood.label.split(' ')[1]}</span>
-              </button>
-              <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 px-2 py-1 bg-ink text-white text-[10px] font-bold rounded shadow-xl opacity-0 group-hover/tt:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-[120]">Mood</div>
-              
-              <AnimatePresence>
-                {showMoods && (
-                  <motion.div 
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 10 }}
-                    className={cn("absolute top-full left-0 mt-2 shadow-2xl rounded-2xl p-4 z-[100] w-[240px] border grid grid-cols-5 gap-1", isDarkMode ? "bg-[#111216] border-stone-800" : "bg-white border-stone-200")}
-                  >
-                    {MOODS.map(m => (
-                      <button
-                        key={m.id}
-                        onClick={() => { setMood(m); setCustomColor(m.color); setShowMoods(false); }}
-                        className="text-xl p-2 rounded-lg hover:bg-stone-100 transition-transform active:scale-90"
-                        title={m.label}
-                      >
-                        {m.label.split(' ')[1]}
-                      </button>
-                    ))}
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-
-            <div className="relative group/tt">
-              <button 
-                onClick={() => { setShowThemes(!showThemes); setShowMoods(false); setShowPageConfig(false); }}
-                className={cn("p-2 rounded-lg transition-all", showThemes ? "bg-stone-800 text-white" : "text-stone-400 hover:bg-stone-100")}
-              >
-                <Palette size={16} />
-              </button>
-              <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 px-2 py-1 bg-ink text-white text-[10px] font-bold rounded shadow-xl opacity-0 group-hover/tt:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-[120]">Themes</div>
-              
-              <AnimatePresence>
-                {showThemes && (
-                  <motion.div 
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 10 }}
-                    className={cn("absolute top-full left-0 sm:left-auto sm:right-0 mt-2 shadow-2xl rounded-2xl p-3 z-[100] w-[200px] border flex flex-col gap-1", isDarkMode ? "bg-[#111216] border-stone-800" : "bg-white border-stone-200")}
-                  >
-                    {SCRAPBOOK_THEMES.map(theme => (
-                      <button
-                        key={theme.id}
-                        onClick={() => { setActiveTheme(theme); setShowThemes(false); }}
-                        className={cn("flex items-center gap-2 p-2 rounded-lg text-xs font-bold transition-all border text-left", activeTheme.id === theme.id ? "bg-stone-800 border-stone-700 text-white" : "border-transparent hover:bg-stone-50")}
-                      >
-                        <div className="w-3 h-3 rounded-full" style={{ backgroundColor: theme.colors.surface }} />
-                        <span className="truncate">{theme.name}</span>
-                      </button>
-                    ))}
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-
-            <div className="relative group/tt">
-              <button 
-                onClick={() => { setShowPageConfig(!showPageConfig); setShowThemes(false); setShowMoods(false); }}
-                className={cn("p-2 rounded-lg transition-all", showPageConfig ? "bg-stone-800 text-white" : "text-stone-400 hover:bg-stone-100")}
-              >
-                <Cog size={16} />
-              </button>
-              <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 px-2 py-1 bg-ink text-white text-[10px] font-bold rounded shadow-xl opacity-0 group-hover/tt:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-[120]">Settings</div>
-              
-              <AnimatePresence>
-                {showPageConfig && (
-                  <motion.div 
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 10 }}
-                    className={cn("absolute top-full right-0 mt-2 shadow-2xl rounded-2xl p-4 z-[100] w-56 border flex flex-col gap-4", isDarkMode ? "bg-[#111216] border-stone-800" : "bg-white border-stone-200")}
-                  >
-                    <div>
-                      <h3 className="text-[10px] font-bold uppercase tracking-widest mb-2 opacity-50">Grid Layout</h3>
-                      <div className="flex flex-wrap gap-1">
-                        {['blank', 'ruled', 'grid', 'dotted'].map(t => (
-                          <button key={t} onClick={() => setPageType(t as any)} className={cn("px-2 py-1 rounded text-[10px] font-bold border capitalize", pageType === t ? "bg-stone-800 text-white border-stone-800" : "border-stone-200")}>{t}</button>
+            {/* Group 2: Elements */}
+            <div className="flex items-center gap-0.5 justify-center bg-white/40 p-1 rounded-xl border border-white/20 shrink-0">
+              <div className="relative group/tt">
+                <button onClick={() => setShowStickers(p => !p)} className={cn("p-2 rounded-lg transition-all", showStickers ? "text-white" : "text-stone-400 hover:bg-stone-100")} 
+                        style={{ backgroundColor: showStickers ? 'var(--accent-color)' : undefined }}>
+                  <Smile size={16} />
+                </button>
+                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 px-2 py-1 bg-ink text-white text-[10px] font-bold rounded shadow-xl opacity-0 group-hover/tt:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-[120]">Stickers</div>
+                
+                <AnimatePresence>
+                  {showStickers && (
+                    <motion.div 
+                      initial={{ opacity: 0, scale: 0.95, y: 10 }}
+                      animate={{ opacity: 1, scale: 1, y: 0 }}
+                      exit={{ opacity: 0, scale: 0.95, y: 10 }}
+                      className={cn("absolute top-[calc(100%+10px)] left-0 sm:left-auto sm:right-0 mt-2 shadow-2xl rounded-2xl p-4 z-[100] w-[280px] h-[350px] overflow-y-auto border", isDarkMode ? "bg-[#111216] border-stone-800" : "bg-white border-stone-200")}
+                    >
+                      <h3 className="text-xs font-bold uppercase tracking-widest mb-3 opacity-60">Stickers</h3>
+                      <div className="grid grid-cols-4 gap-2">
+                        {DECORATIVE_STICKERS.map(s => (
+                          <button
+                            key={s.id}
+                            onClick={() => addSticker(s.id)}
+                            className={cn("aspect-square p-2 rounded-lg transition-all flex items-center justify-center", isDarkMode ? "bg-stone-800 hover:bg-stone-700" : "bg-stone-50 hover:bg-stone-100")}
+                          >
+                            {s.component}
+                          </button>
                         ))}
                       </div>
-                    </div>
-                    <div>
-                      <h3 className="text-[10px] font-bold uppercase tracking-widest mb-2 opacity-50">Canvas Size</h3>
-                      <select value={pageSize} onChange={(e) => setPageSize(e.target.value as any)} className="w-full text-xs font-bold bg-stone-50 border border-stone-200 p-1 rounded">
-                        {Object.keys(PAGE_SIZES).map(s => <option key={s} value={s}>{s}</option>)}
-                      </select>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+
+              <div className="relative group/tt">
+                <button 
+                  onClick={addTextBox}
+                  className="p-2 rounded-lg text-stone-400 hover:bg-stone-100"
+                >
+                  <PlusSquare size={16} />
+                </button>
+                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 px-2 py-1 bg-ink text-white text-[10px] font-bold rounded shadow-xl opacity-0 group-hover/tt:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-[120]">New Note</div>
+              </div>
+
+              <div className="relative group/tt">
+                <label className="cursor-pointer p-2 rounded-lg text-stone-400 hover:bg-stone-100 flex items-center justify-center">
+                  <ImagePlus size={16} />
+                  <input type="file" accept="image/*" onChange={handleImportImage} className="hidden" />
+                </label>
+                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 px-2 py-1 bg-ink text-white text-[10px] font-bold rounded shadow-xl opacity-0 group-hover/tt:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-[120]">Photo</div>
+              </div>
+              
+              <div className="relative group/tt">
+                <button onClick={toggleVoice} className={cn("p-2 rounded-lg transition-all", isListening ? "bg-red-500 text-white animate-pulse" : "text-stone-400 hover:bg-stone-100")}>
+                  {isListening ? <Mic size={16} /> : <MicOff size={16} />}
+                </button>
+                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 px-2 py-1 bg-ink text-white text-[10px] font-bold rounded shadow-xl opacity-0 group-hover/tt:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-[120]">Voice</div>
+              </div>
             </div>
 
-            <div className="relative group/tt">
-              <button 
-                onClick={downloadPage} 
-                className="p-2 rounded-lg text-stone-400 hover:bg-stone-100 transition-all"
-              >
-                <Download size={16} />
-              </button>
-              <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 px-2 py-1 bg-ink text-white text-[10px] font-bold rounded shadow-xl opacity-0 group-hover/tt:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-[120]">Export</div>
-            </div>
+            {/* Group 3: Settings */}
+            <div className="flex items-center gap-0.5 justify-center sm:justify-center bg-white/40 p-1 rounded-xl border border-white/20 shrink-0">
+              <div className="relative group/tt">
+                <button 
+                  onClick={() => { setShowMoods(!showMoods); setShowThemes(false); setShowPageConfig(false); }}
+                  className={cn("p-2 rounded-lg transition-all", showMoods ? "bg-stone-800 text-white" : "text-stone-400 hover:bg-stone-100")}
+                >
+                  <span className="text-[14px] leading-none">{mood.label.split(' ')[1]}</span>
+                </button>
+                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 px-2 py-1 bg-ink text-white text-[10px] font-bold rounded shadow-xl opacity-0 group-hover/tt:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-[120]">Mood</div>
+                
+                <AnimatePresence>
+                  {showMoods && (
+                    <motion.div 
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 10 }}
+                      className={cn("absolute top-full left-0 mt-2 shadow-2xl rounded-2xl p-4 z-[100] w-[240px] border grid grid-cols-5 gap-1", isDarkMode ? "bg-[#111216] border-stone-800" : "bg-white border-stone-200")}
+                    >
+                      {MOODS.map(m => (
+                        <button
+                          key={m.id}
+                          onClick={() => { setMood(m); setCustomColor(m.color); setShowMoods(false); }}
+                          className="text-xl p-2 rounded-lg hover:bg-stone-100 transition-transform active:scale-90"
+                          title={m.label}
+                        >
+                          {m.label.split(' ')[1]}
+                        </button>
+                      ))}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
 
-            <div className="relative group/tt">
-              <button 
-                onClick={clearCanvas}
-                className="p-2 rounded-lg text-stone-400 hover:bg-red-50 hover:text-red-500 transition-all"
-              >
-                <Trash size={16} />
-              </button>
-              <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 px-2 py-1 bg-ink text-white text-[10px] font-bold rounded shadow-xl opacity-0 group-hover/tt:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-[120]">Clear</div>
+              <div className="relative group/tt">
+                <button 
+                  onClick={() => { setShowThemes(!showThemes); setShowMoods(false); setShowPageConfig(false); }}
+                  className={cn("p-2 rounded-lg transition-all", showThemes ? "bg-stone-800 text-white" : "text-stone-400 hover:bg-stone-100")}
+                >
+                  <Palette size={16} />
+                </button>
+                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 px-2 py-1 bg-ink text-white text-[10px] font-bold rounded shadow-xl opacity-0 group-hover/tt:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-[120]">Themes</div>
+                
+                <AnimatePresence>
+                  {showThemes && (
+                    <motion.div 
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 10 }}
+                      className={cn("absolute top-full left-0 sm:left-auto sm:right-0 mt-2 shadow-2xl rounded-2xl p-3 z-[100] w-[200px] border flex flex-col gap-1", isDarkMode ? "bg-[#111216] border-stone-800" : "bg-white border-stone-200")}
+                    >
+                      {SCRAPBOOK_THEMES.map(theme => (
+                        <button
+                          key={theme.id}
+                          onClick={() => { setActiveTheme(theme); setShowThemes(false); }}
+                          className={cn("flex items-center gap-2 p-2 rounded-lg text-xs font-bold transition-all border text-left", activeTheme.id === theme.id ? "bg-stone-800 border-stone-700 text-white" : "border-transparent hover:bg-stone-50")}
+                        >
+                          <div className="w-3 h-3 rounded-full" style={{ backgroundColor: theme.colors.surface }} />
+                          <span className="truncate">{theme.name}</span>
+                        </button>
+                      ))}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+
+              <div className="relative group/tt">
+                <button 
+                  onClick={() => { setShowPageConfig(!showPageConfig); setShowThemes(false); setShowMoods(false); }}
+                  className={cn("p-2 rounded-lg transition-all", showPageConfig ? "bg-stone-800 text-white" : "text-stone-400 hover:bg-stone-100")}
+                >
+                  <Cog size={16} />
+                </button>
+                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 px-2 py-1 bg-ink text-white text-[10px] font-bold rounded shadow-xl opacity-0 group-hover/tt:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-[120]">Settings</div>
+                
+                <AnimatePresence>
+                  {showPageConfig && (
+                    <motion.div 
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 10 }}
+                      className={cn("absolute top-full right-0 mt-2 shadow-2xl rounded-2xl p-4 z-[100] w-56 border flex flex-col gap-4", isDarkMode ? "bg-[#111216] border-stone-800" : "bg-white border-stone-200")}
+                    >
+                      <div>
+                        <h3 className="text-[10px] font-bold uppercase tracking-widest mb-2 opacity-50">Grid Layout</h3>
+                        <div className="flex flex-wrap gap-1">
+                          {['blank', 'ruled', 'grid', 'dotted'].map(t => (
+                            <button key={t} onClick={() => setPageType(t as any)} className={cn("px-2 py-1 rounded text-[10px] font-bold border capitalize", pageType === t ? "bg-stone-800 text-white border-stone-800" : "border-stone-200")}>{t}</button>
+                          ))}
+                        </div>
+                      </div>
+                      <div>
+                        <h3 className="text-[10px] font-bold uppercase tracking-widest mb-2 opacity-50">Canvas Size</h3>
+                        <select value={pageSize} onChange={(e) => setPageSize(e.target.value as any)} className="w-full text-xs font-bold bg-stone-50 border border-stone-200 p-1 rounded">
+                          {Object.keys(PAGE_SIZES).map(s => <option key={s} value={s}>{s}</option>)}
+                        </select>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+
+              <div className="relative group/tt">
+                <button 
+                  onClick={downloadPage} 
+                  className="p-2 rounded-lg text-stone-400 hover:bg-stone-100 transition-all"
+                >
+                  <Download size={16} />
+                </button>
+                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 px-2 py-1 bg-ink text-white text-[10px] font-bold rounded shadow-xl opacity-0 group-hover/tt:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-[120]">Export</div>
+              </div>
+
+              <div className="relative group/tt">
+                <button 
+                  onClick={clearCanvas}
+                  className="p-2 rounded-lg text-stone-400 hover:bg-red-50 hover:text-red-500 transition-all"
+                >
+                  <Trash size={16} />
+                </button>
+                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 px-2 py-1 bg-ink text-white text-[10px] font-bold rounded shadow-xl opacity-0 group-hover/tt:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-[120]">Clear</div>
+              </div>
             </div>
           </div>
         </div>
