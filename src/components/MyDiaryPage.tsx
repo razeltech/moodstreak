@@ -702,9 +702,9 @@ export function MyDiaryPage() {
         {/* Responsive Bento Grid Toolbar */}
         <div className={cn("rounded-2xl border bg-opacity-50 backdrop-blur-sm shadow-sm w-full overflow-x-auto touch-pan-x custom-scrollbar pb-1", 
           isDarkMode ? "bg-stone-900/50 border-stone-800" : "bg-stone-50/50 border-stone-200")}>
-          <div className="flex flex-nowrap items-center justify-start sm:justify-between gap-2 p-1.5 min-w-max sm:min-w-0 sm:w-full">
+          <div className="flex flex-nowrap items-center justify-start sm:justify-between gap-2 p-1.5 min-w-0 w-full">
             {/* Group 1: Core Tools */}
-            <div className="flex items-center gap-0.5 justify-center bg-white/40 p-1 rounded-xl border border-white/20 shrink-0">
+            <div className="flex flex-wrap items-center gap-0.5 justify-center bg-white/40 p-1 rounded-xl border border-white/20 shrink-0">
               <div className="relative group/tt">
                 <button 
                   onClick={() => { setDrawingMode(false); setActiveTool('type'); }}
@@ -745,7 +745,7 @@ export function MyDiaryPage() {
             </div>
 
             {/* Group 2: Elements */}
-            <div className="flex items-center gap-0.5 justify-center bg-white/40 p-1 rounded-xl border border-white/20 shrink-0">
+            <div className="flex flex-wrap items-center gap-0.5 justify-center bg-white/40 p-1 rounded-xl border border-white/20 shrink-0">
               <div className="relative group/tt">
                 <button onClick={() => setShowStickers(p => !p)} className={cn("p-2 rounded-lg transition-all", showStickers ? "text-white" : "text-stone-400 hover:bg-stone-100")} 
                         style={{ backgroundColor: showStickers ? 'var(--accent-color)' : undefined }}>
@@ -805,7 +805,7 @@ export function MyDiaryPage() {
             </div>
 
             {/* Group 3: Settings */}
-            <div className="flex items-center gap-0.5 justify-center sm:justify-center bg-white/40 p-1 rounded-xl border border-white/20 shrink-0">
+            <div className="flex flex-wrap items-center gap-0.5 justify-center sm:justify-center bg-white/40 p-1 rounded-xl border border-white/20 shrink-0">
               <div className="relative group/tt">
                 <button 
                   onClick={() => { setShowMoods(!showMoods); setShowThemes(false); setShowPageConfig(false); }}
@@ -937,9 +937,9 @@ export function MyDiaryPage() {
             initial={{ y: -20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: -20, opacity: 0 }}
-            className="bg-white/95 text-stone-800 backdrop-blur-md border-b border-stone-200 px-4 pt-2 pb-3 flex items-center justify-center gap-6 sticky top-[115px] z-40 shadow-sm overflow-x-auto w-full custom-scrollbar"
+            className="bg-white/95 text-stone-800 backdrop-blur-md border-b border-stone-200 px-4 pt-2 pb-3 flex items-center justify-center gap-6 sticky top-[115px] z-40 shadow-sm overflow-x-auto touch-pan-x w-full custom-scrollbar"
           >
-          <div className="flex items-center flex-nowrap w-max min-w-full gap-6">
+<div className="flex items-center flex-nowrap w-max min-w-0 gap-6">
                
                {/* Pen Tool Settings */}
                {activeTool === 'pen' && (
@@ -963,7 +963,7 @@ export function MyDiaryPage() {
                       <input 
                         type="range" min="1" max="25" value={strokeWidth} 
                         onChange={(e) => setStrokeWidth(Number(e.target.value))}
-                        className="w-16 sm:w-24 accent-stone-700 h-1 cursor-pointer"
+                        className="w-full max-w-[160px] sm:w-24 accent-stone-700 h-1 cursor-pointer"
                       />
                     </div>
                  </div>
@@ -971,14 +971,14 @@ export function MyDiaryPage() {
 
                {/* Background Image Settings */}
                {backgroundImage && (
-                 <div className="flex flex-nowrap items-center gap-4 pr-6 border-r border-stone-200 last:border-0 last:pr-0 shrink-0">
+                 <div className="flex flex-wrap items-center gap-4 pr-6 border-r border-stone-200 last:border-0 last:pr-0 shrink-0">
                     <span className="text-[10px] font-bold text-stone-500 uppercase tracking-wider hidden sm:block">Background</span>
                     <div className="flex items-center gap-2">
                       <span className="text-[10px] uppercase font-bold text-stone-400">Opacity</span>
                       <input 
                         type="range" min="0" max="1" step="0.1" value={backgroundOpacity}
                         onChange={(e) => setBackgroundOpacity(Number(e.target.value))}
-                        className="w-16 sm:w-24 accent-stone-700 h-1 cursor-pointer"
+                        className="w-full max-w-[160px] sm:w-24 accent-stone-700 h-1 cursor-pointer"
                         title="Adjust Background Opacity"
                       />
                       <span className="text-[10px] font-medium text-stone-500 w-6">{Math.round(backgroundOpacity * 100)}%</span>
@@ -1282,7 +1282,7 @@ export function MyDiaryPage() {
              </div>
           </div>
 
-          {/* Minimal footer inside canvas — visible only during export */}
+          {/* Minimal footer inside canvas ï¿½ visible only during export */}
           {isExporting && (
             <div className="h-10 flex items-center justify-between px-8 z-30 shrink-0 border-t relative" style={{ borderColor: activeTheme.colors.border }}>
                <div className="font-sans text-[9px] font-bold uppercase tracking-widest opacity-40">MoodStreak</div>
@@ -1293,7 +1293,7 @@ export function MyDiaryPage() {
       </div>
     </div>
 
-    {/* Mobile-friendly Footer — outside scaled canvas, always full-size */}
+    {/* Mobile-friendly Footer ï¿½ outside scaled canvas, always full-size */}
     {!isExporting && (
       <div className={cn(
         "shrink-0 border-t px-3 sm:px-6 pt-2 pb-24 sm:pb-2 flex items-center justify-between gap-2 z-50 transition-colors",
