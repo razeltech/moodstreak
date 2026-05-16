@@ -1064,7 +1064,7 @@ export function MyDiaryPage() {
       </AnimatePresence>
 
       {/* Main Workspace */}
-      <div className={cn("flex-1 min-h-0 min-w-0 overflow-x-auto overflow-y-auto p-4 sm:p-8 pb-24 sm:pb-8 transition-colors bg-stone-200/30 touch-auto scroll-smooth")}>
+      <div className={cn("flex-1 min-h-0 min-w-0 overflow-x-auto overflow-y-auto p-4 sm:p-8 pb-24 sm:pb-8 transition-colors bg-stone-200/30 touch-auto scroll-smooth custom-scrollbar")}>
         <div className="flex w-max min-w-full justify-start sm:justify-center items-start min-h-full">
           <motion.div 
             ref={pageRef}
