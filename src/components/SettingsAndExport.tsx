@@ -197,6 +197,36 @@ export function SettingsAndExport() {
                       ))}
                     </div>
                   </div>
+
+                  <div className="bg-white/50 border border-ink/10 rounded-2xl p-4">
+                    <div className="flex flex-col gap-1 mb-3">
+                      <label className="block text-[10px] font-black text-ink-light uppercase tracking-widest leading-none">Currency</label>
+                      <p className="text-[10px] text-ink-light/60 font-medium">For Finance & Bill tracking</p>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      {[
+                        { label: 'Rupee (₹)', value: '₹' },
+                        { label: 'Dollar ($)', value: '$' },
+                        { label: 'Euro (€)', value: '€' },
+                        { label: 'Pound (£)', value: '£' },
+                        { label: 'Yen (¥)', value: '¥' },
+                      ].map(curr => (
+                        <button
+                          key={curr.value}
+                          onClick={() => updateSetting('currency', curr.value)}
+                          className={cn(
+                            "px-4 py-2 rounded-xl font-bold text-sm border-2 transition-all",
+                            (settings?.currency || '₹') === curr.value 
+                              ? "text-white border-ink shadow-[2px_2px_0px_#2C2C2C]" 
+                              : "bg-white border-ink/10 text-ink-light hover:border-ink/30"
+                          )}
+                          style={{ backgroundColor: (settings?.currency || '₹') === curr.value ? 'var(--accent-color)' : undefined }}
+                        >
+                          {curr.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
                 </div>
               </div>
             </section>

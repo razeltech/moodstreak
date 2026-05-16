@@ -162,6 +162,8 @@ function HealthTrackers() {
 
 function FinanceTracker() {
   const expenses = useLiveQuery(() => db.expenseLogs.orderBy('date').toArray());
+  const settings = useLiveQuery(() => db.settings.get(1));
+  const currency = settings?.currency || '₹';
   const [amount, setAmount] = useState('');
   const [desc, setDesc] = useState('');
   const [category, setCategory] = useState('Food');
@@ -179,14 +181,14 @@ function FinanceTracker() {
       <section className="lg:col-span-8 bg-[#FDFBF7] rounded-[32px] shadow-[8px_8px_0px_#D9D1C1] border-2 border-[#2C2C2C] p-8">
         <div className="flex items-center justify-between mb-8 pb-4 border-b-2 border-ink/5">
           <div className="flex items-center gap-3"><div className="p-2 bg-yellow-100 rounded-xl text-yellow-700"><Wallet size={20} /></div><h3 className="text-xl font-playfair font-black text-ink italic">Expense Log</h3></div>
-          <div className="text-right"><div className="text-[10px] font-black uppercase text-ink-light opacity-60 tracking-widest">Total Spent</div><div className="text-2xl font-black text-ink">${totalSpent.toLocaleString()}</div></div>
+          <div className="text-right"><div className="text-[10px] font-black uppercase text-ink-light opacity-60 tracking-widest">Total Spent</div><div className="text-2xl font-black text-ink">{currency}{totalSpent.toLocaleString()}</div></div>
         </div>
         <div className="space-y-4 max-h-[500px] overflow-y-auto custom-scrollbar pr-2">
           {expenses?.slice().reverse().map(exp => (
             <div key={exp.id} className="flex items-center justify-between p-4 bg-white/50 rounded-2xl border border-ink/5 group">
               <div className="flex items-center gap-4"><div className="w-12 h-12 bg-cream rounded-xl border border-ink/10 flex items-center justify-center text-xl">{exp.category === 'Food' ? '🍱' : '📦'}</div>
               <div className="flex flex-col"><span className="text-sm font-black text-ink">{exp.description}</span><span className="text-[10px] text-ink-light font-bold opacity-60 uppercase">{exp.category}</span></div></div>
-              <div className="flex items-center gap-6"><span className="text-lg font-black text-ink">-${exp.amount}</span><button onClick={() => db.expenseLogs.delete(exp.id)} className="opacity-0 group-hover:opacity-100 text-red-400 hover:bg-red-50 p-2 rounded-lg transition-all"><Trash2 size={16} /></button></div>
+              <div className="flex items-center gap-6"><span className="text-lg font-black text-ink">-{currency}{exp.amount}</span><button onClick={() => db.expenseLogs.delete(exp.id)} className="opacity-0 group-hover:opacity-100 text-red-400 hover:bg-red-50 p-2 rounded-lg transition-all"><Trash2 size={16} /></button></div>
             </div>
           ))}
         </div>
@@ -194,7 +196,7 @@ function FinanceTracker() {
       <aside className="lg:col-span-4 bg-[#FDFBF7] rounded-[32px] shadow-[8px_8px_0px_#D9D1C1] border-2 border-[#2C2C2C] p-6">
         <h4 className="text-[10px] font-black text-ink-light uppercase tracking-widest mb-4">Quick Add</h4>
         <div className="space-y-4">
-          <input type="number" placeholder="Amount ($)" value={amount} onChange={(e) => setAmount(e.target.value)} className="w-full bg-white border border-ink/10 rounded-xl px-4 py-3 text-sm font-bold" />
+          <input type="number" placeholder={`Amount (${currency})`} value={amount} onChange={(e) => setAmount(e.target.value)} className="w-full bg-white border border-ink/10 rounded-xl px-4 py-3 text-sm font-bold" />
           <input type="text" placeholder="Description..." value={desc} onChange={(e) => setDesc(e.target.value)} className="w-full bg-white border border-ink/10 rounded-xl px-4 py-3 text-sm font-bold" />
           <select value={category} onChange={(e) => setCategory(e.target.value)} className="w-full bg-white border border-ink/10 rounded-xl px-4 py-3 text-sm font-bold"><option>Food</option><option>Transport</option><option>Rent</option><option>Shopping</option><option>Other</option></select>
           <button onClick={addExpense} className="w-full bg-yellow-400 text-ink py-4 rounded-xl font-black text-xs uppercase tracking-widest border-2 border-ink shadow-[4px_4px_0px_#2C2C2C]">Log Expense</button>
@@ -207,6 +209,8 @@ function FinanceTracker() {
 function InsuranceAndBills() {
   const policies = useLiveQuery(() => db.insuranceLogs.toArray());
   const bills = useLiveQuery(() => db.recurringPayments.toArray());
+  const settings = useLiveQuery(() => db.settings.get(1));
+  const currency = settings?.currency || '₹';
   const [showAddPolicy, setShowAddPolicy] = useState(false);
   const [showAddBill, setShowAddBill] = useState(false);
 
@@ -247,7 +251,7 @@ function InsuranceAndBills() {
           {bills?.map(bill => (
             <div key={bill.id} className="bg-white p-5 rounded-2xl border border-ink/10 shadow-sm flex flex-col justify-between group">
               <div className="flex justify-between items-start mb-2"><div className="flex flex-col"><span className="text-xs font-black uppercase opacity-40">{bill.type}</span><span className="text-lg font-black text-ink">{bill.name}</span></div><button onClick={() => db.recurringPayments.delete(bill.id)} className="opacity-0 group-hover:opacity-100 text-red-400"><Trash2 size={16}/></button></div>
-              <div className="flex items-center justify-between mt-4"><div className="flex items-center gap-1.5 text-xs font-bold text-ink-light"><Calendar size={14} /> Due: {bill.dueDate}</div><div className="text-xl font-black text-ink">${bill.amount}</div></div>
+              <div className="flex items-center justify-between mt-4"><div className="flex items-center gap-1.5 text-xs font-bold text-ink-light"><Calendar size={14} /> Due: {bill.dueDate}</div><div className="text-xl font-black text-ink">{currency}{bill.amount}</div></div>
             </div>
           ))}
         </div>

@@ -59,6 +59,7 @@ export interface Settings {
   pinHash?: string;
   dailyWordGoal?: number;
   pageSizeId?: string;
+  currency?: string;
 }
 
 export interface WeightLog {
