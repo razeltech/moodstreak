@@ -1,0 +1,230 @@
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Cinzel:wght@400..700&family=Dancing+Script:wght@400..700&family=Indie+Flower&family=Inter:wght@400..700&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Lora:ital,wght@0,400..700;1,400..700&family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Orbitron:wght@400..900&family=Outfit:wght@100..900&family=Permanent+Marker&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Satisfy&family=Roboto:ital,wght@0,100..900;1,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Oswald:wght@200..700&family=Raleway:ital,wght@0,100..900;1,100..900&family=Kalam:wght@300;400;700&family=Pacifico&family=Sacramento&family=Great+Vibes&family=Alex+Brush&family=Pinyon+Script&family=Rochester&family=Noto+Sans+JP:wght@100..900&family=Noto+Serif+JP:wght@200..900&family=Zen+Kaku+Gothic+New:wght@300..900&family=Handlee&family=Coming+Soon&family=Architects+Daughter&family=Patrick+Hand&family=Amatic+SC:wght@400;700&family=Gloria+Hallelujah&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-rose: var(--rose);
+  --color-rose-light: var(--rose-light);
+  --color-rose-dark: var(--rose-dark);
+  --color-lavender: var(--lavender);
+  --color-lavender-light: var(--lavender-light);
+  --color-lavender-dark: var(--lavender-dark);
+  --color-sage: var(--sage);
+  --color-sage-light: var(--sage-light);
+  --color-gold: var(--gold);
+  --color-gold-light: var(--gold-light);
+  --color-cream: var(--cream);
+  --color-warm-white: var(--warm-white);
+  --color-ink: var(--ink);
+  --color-ink-light: var(--ink-light);
+  
+  --font-inter: var(--global-font, "Inter", sans-serif);
+  --font-poppins: var(--global-font, "Poppins", sans-serif);
+  --font-nunito: var(--global-font, "Nunito", sans-serif);
+  --font-caveat: var(--global-font, "Caveat", cursive);
+  --font-dancing: var(--global-font, "Dancing Script", cursive);
+  --font-indie: var(--global-font, "Indie Flower", cursive);
+  --font-playfair: var(--global-font, "Playfair Display", serif);
+  --font-merriweather: var(--global-font, "Merriweather", serif);
+  --font-lora: var(--global-font, "Lora", serif);
+  --font-mono: var(--global-font, "JetBrains Mono", monospace);
+}
+
+@layer utilities {
+  .paper-ruled {
+    background-image: linear-gradient(#e5e7eb 1px, transparent 1px);
+    background-size: 100% 2rem;
+  }
+  .paper-grid {
+    background-image: radial-gradient(#e5e7eb 1px, transparent 1px), radial-gradient(#e5e7eb 1px, transparent 1px);
+    background-size: 2rem 2rem;
+    background-position: 0 0, 1rem 1rem;
+  }
+  .paper-grid-solid {
+    background-image: linear-gradient(#e5e7eb 1px, transparent 1px), linear-gradient(90deg, #e5e7eb 1px, transparent 1px);
+    background-size: 2rem 2rem;
+  }
+  .paper-dotted {
+    background-image: radial-gradient(#cbd5e1 1.5px, transparent 1.5px);
+    background-size: 1.5rem 1.5rem;
+  }
+}
+
+@layer base {
+  ::selection {
+    background-color: #fef08a; /* Yellow highlight */
+    color: #3D2B3D;
+  }
+
+  :root, .theme-rose {
+    --rose: #E8A0B4;
+    --rose-light: #F7D6E3;
+    --rose-dark: #C06080;
+    --lavender: #C4B0D8;
+    --lavender-light: #EDE8F5;
+    --lavender-dark: #8B6FAE;
+    --sage: #A8C5A0;
+    --sage-light: #DFF0DA;
+    --gold: #D4A96A;
+    --gold-light: #F5E8D3;
+    --cream: #FAF6F1;
+    --warm-white: #FFFDF9;
+    --ink: #3D2B3D;
+    --ink-light: #6B5B6B;
+    --border-color: rgba(180,140,160,0.2);
+    --mood-happy: #F9C74F;
+    --mood-calm: #90DBF4;
+    --mood-sad: #A0C4FF;
+    --mood-angry: #F4845F;
+    --mood-excited: #FCA3CC;
+    --mood-tired: #B5B5B5;
+    --mood-grateful: #95D5B2;
+    --mood-lonely: #AE9BB5;
+  }
+  
+  .theme-lavender {
+    --rose-dark: #8B6FAE;
+    --rose-light: #EDE8F5;
+    --lavender-dark: #6050A0;
+    --cream: #F5F3FA;
+    --warm-white: #FFFDF9;
+    --ink: #3D2B3D;
+    --ink-light: #6B5B6B;
+    --border-color: rgba(180,140,160,0.2);
+  }
+  
+  .theme-sage {
+    --rose-dark: #5A9050;
+    --rose-light: #DFF0DA;
+    --lavender-dark: #3D7030;
+    --cream: #F4FAF2;
+    --warm-white: #FFFDF9;
+    --ink: #3D2B3D;
+    --ink-light: #6B5B6B;
+    --border-color: rgba(180,140,160,0.2);
+  }
+  
+  .theme-midnight {
+    --rose-dark: #C4B0D8;
+    --rose-light: #2D2240;
+    --lavender-dark: #A090C0;
+    --cream: #1A1530;
+    --warm-white: #241C38;
+    --ink: #E8E0F0;
+    --ink-light: #B0A0C0;
+    --border-color: rgba(180,140,220,0.2);
+  }
+}
+
+@layer utilities {
+  .paper-ruled {
+    background-image: linear-gradient(#d1d5db 1px, transparent 1px);
+    background-size: 100% 2.5rem;
+    background-position: 0 2rem; 
+  }
+  
+  .paper-grid {
+    background-size: 30px 30px;
+    background-image:
+      linear-gradient(to right, rgba(0, 0, 0, 0.04) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(0, 0, 0, 0.04) 1px, transparent 1px);
+  }
+
+  .paper-dotted {
+    background-image: radial-gradient(rgba(0, 0, 0, 0.1) 1.5px, transparent 1.5px);
+    background-size: 30px 30px;
+  }
+
+  .paper-warm {
+    background-color: #FDF9F3;
+    background-image: url("https://www.transparenttextures.com/patterns/felt.png");
+  }
+
+  .paper-kraft {
+    background-color: #d7ba8d;
+    background-image: url("https://www.transparenttextures.com/patterns/recycled-paper-texture.png");
+  }
+
+  .paper-texture {
+    background-image: radial-gradient(#000 0.5px, transparent 0.5px);
+    background-size: 100px 100px;
+    opacity: 0.05;
+  }
+
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .hide-scrollbar {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #D9D1C1;
+    border-radius: 10px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #2C2C2C;
+  }
+
+  .ProseMirror {
+    outline: none !important;
+  }
+  
+  .ProseMirror p {
+    margin-bottom: 0.5em;
+  }
+  
+  .ProseMirror h1 {
+    font-size: 2em;
+    font-weight: bold;
+    margin-bottom: 0.5em;
+  }
+  
+  .ProseMirror h2 {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-bottom: 0.5em;
+  }
+  
+  .ProseMirror ul {
+    list-style-type: disc;
+    padding-left: 1.5em;
+    margin-bottom: 0.5em;
+  }
+  
+  .ProseMirror ol {
+    list-style-type: decimal;
+    padding-left: 1.5em;
+    margin-bottom: 0.5em;
+  }
+  
+  .ProseMirror li p {
+    margin-bottom: 0;
+  }
+  
+  .diary-quill .ql-editor {
+    padding: 0 !important;
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    color: inherit;
+  }
+  
+  .diary-quill .ql-editor.ql-blank::before {
+    left: 0 !important;
+    font-style: normal !important;
+    color: #9CA3AF !important;
+  }
+}
+
+body {
+  background-color: #f3f4f6; /* Default gray bg */
+  color: #1f2937;
+  overflow-x: hidden;
+}

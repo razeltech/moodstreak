@@ -1,0 +1,10 @@
+{
+  "name": "MoodStreak",
+  "description": "Offline-first Personal Diary + Mood Tracker PWA with Japanese stationery aesthetics and voice-to-text journaling.",
+  "requestFramePermissions": [
+    "microphone"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
