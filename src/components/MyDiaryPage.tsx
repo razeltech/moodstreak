@@ -308,6 +308,25 @@ export function MyDiaryPage() {
 
   const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
 
+  // Responsive scale: shrink diary page to fit mobile screen
+  const [pageScale, setPageScale] = useState(1);
+  useEffect(() => {
+    const computeScale = () => {
+      const vw = window.innerWidth;
+      if (vw >= 768) {
+        setPageScale(1);
+      } else {
+        // Add 32px padding on each side
+        const availableWidth = vw - 32;
+        const scale = Math.min(1, availableWidth / currentSize.width);
+        setPageScale(parseFloat(scale.toFixed(3)));
+      }
+    };
+    computeScale();
+    window.addEventListener('resize', computeScale);
+    return () => window.removeEventListener('resize', computeScale);
+  }, [currentSize.width]);
+
   // Calculate word count
   const wordCount = React.useMemo(() => {
     const fullText = (pageTitle + ' ' + text + ' ' + textBoxes.map(b => b.text).join(' ')).replace(/<[^>]*>/g, ' ');
@@ -681,7 +700,7 @@ export function MyDiaryPage() {
         </div>
 
         {/* Responsive Bento Grid Toolbar */}
-        <div className={cn("rounded-2xl border bg-opacity-50 backdrop-blur-sm shadow-sm w-full overflow-x-auto touch-pan-x", 
+        <div className={cn("rounded-2xl border bg-opacity-50 backdrop-blur-sm shadow-sm w-full overflow-x-auto touch-pan-x custom-scrollbar pb-1", 
           isDarkMode ? "bg-stone-900/50 border-stone-800" : "bg-stone-50/50 border-stone-200")}>
           <div className="flex flex-nowrap items-center justify-start sm:justify-between gap-2 p-1.5 min-w-max sm:min-w-0 sm:w-full">
             {/* Group 1: Core Tools */}
@@ -918,7 +937,7 @@ export function MyDiaryPage() {
             initial={{ y: -20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: -20, opacity: 0 }}
-            className="bg-white/95 text-stone-800 backdrop-blur-md border-b border-stone-200 px-4 py-2 flex items-center justify-center gap-6 sticky top-[125px] sm:top-[73px] z-40 shadow-sm overflow-x-auto w-full no-scrollbar"
+            className="bg-white/95 text-stone-800 backdrop-blur-md border-b border-stone-200 px-4 pt-2 pb-3 flex items-center justify-center gap-6 sticky top-[115px] z-40 shadow-sm overflow-x-auto w-full custom-scrollbar"
           >
           <div className="flex items-center flex-nowrap w-max min-w-full gap-6">
                
@@ -926,7 +945,7 @@ export function MyDiaryPage() {
                {activeTool === 'pen' && (
                  <div className="flex flex-nowrap items-center gap-4 pr-6 border-r border-stone-200 last:border-0 last:pr-0">
                     <span className="text-[10px] font-bold text-stone-500 uppercase tracking-wider hidden sm:block shrink-0">Pen</span>
-                    <div className="flex gap-1 items-center overflow-x-auto no-scrollbar py-0.5 shrink-0">
+                    <div className="flex gap-1 items-center overflow-x-auto custom-scrollbar py-1 shrink-0">
                       {PEN_COLORS.map(c => (
                         <button
                           key={c}
@@ -1064,22 +1083,31 @@ export function MyDiaryPage() {
       </AnimatePresence>
 
       {/* Main Workspace */}
-      <div className={cn("flex-1 min-h-0 min-w-0 overflow-x-auto overflow-y-auto p-4 sm:p-8 pb-24 sm:pb-8 transition-colors bg-stone-200/30 touch-auto scroll-smooth custom-scrollbar")}>
-        <div className="flex w-max min-w-full justify-start sm:justify-center items-start min-h-full">
+      <div className={cn("flex-1 min-h-0 min-w-0 overflow-y-auto p-4 sm:p-8 pb-24 sm:pb-8 transition-colors bg-stone-200/30 touch-auto scroll-smooth custom-scrollbar")}>
+        <div
+          className="flex justify-start sm:justify-center items-start"
+          style={{
+            width: pageScale < 1 ? currentSize.width * pageScale : '100%',
+            minWidth: pageScale < 1 ? currentSize.width * pageScale : undefined,
+            height: currentSize.height * pageScale,
+          }}
+        >
           <motion.div 
             ref={pageRef}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="relative shadow-2xl border flex flex-col shrink-0 overflow-hidden rounded-sm"
-          style={{ 
-             width: currentSize.width, 
-             height: currentSize.height, 
-             backgroundColor: activeTheme.colors.surface, 
-             borderColor: activeTheme.colors.border,
-             fontFamily: activeTheme.fonts.body,
-             color: activeTheme.colors.text
-          }}
-        >
+            style={{ 
+               width: currentSize.width, 
+               height: currentSize.height, 
+               backgroundColor: activeTheme.colors.surface, 
+               borderColor: activeTheme.colors.border,
+               fontFamily: activeTheme.fonts.body,
+               color: activeTheme.colors.text,
+               transformOrigin: 'top left',
+               transform: `scale(${pageScale})`,
+            }}
+          >
           {/* Active Theme Base Pattern / Texture */}
           <div className="absolute inset-0 pointer-events-none z-0 opacity-80 mix-blend-overlay" style={activeTheme.visuals.backgroundStyle} />
           
@@ -1092,7 +1120,7 @@ export function MyDiaryPage() {
                MoodStreak {mood.id !== 'neutral' && <span>: {mood.id}</span>}
              </div>
              <div className="font-sans text-xs font-bold uppercase tracking-widest opacity-80 z-10">
-               {new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+               {format(currentDate, 'EEEE, MMMM d, yyyy')}
              </div>
           </div>
           
@@ -1179,11 +1207,11 @@ export function MyDiaryPage() {
                   enableResizing={!isDrawingMode && !isExporting}
                   className="z-25 group"
                 >
-                  {/* Delete button (only show when dragging/not exporting) */}
+                  {/* Delete button - always visible on mobile, hover on desktop */}
                   {!isExporting && !isDrawingMode && (
                     <button 
                       onClick={(e) => { e.stopPropagation(); setImportedImages(imgs => imgs.filter(i => i.id !== img.id)); }}
-                      className="absolute -top-3 -right-3 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all hover:scale-110 active:scale-95 shadow-lg z-[60] border-2 border-white"
+                      className="absolute -top-3 -right-3 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center sm:opacity-0 sm:group-hover:opacity-100 opacity-100 transition-all hover:scale-110 active:scale-95 shadow-lg z-[60] border-2 border-white"
                       title="Delete"
                       type="button"
                     >
@@ -1223,7 +1251,7 @@ export function MyDiaryPage() {
                     {!isExporting && !isDrawingMode && (
                       <button 
                         onClick={(e) => { e.stopPropagation(); setStickers(s => s.filter(i => i.id !== st.id)); }}
-                        className="absolute -top-3 -right-3 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all hover:scale-110 active:scale-95 shadow-lg z-[60] border-2 border-white"
+                        className="absolute -top-3 -right-3 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center sm:opacity-0 sm:group-hover:opacity-100 opacity-100 transition-all hover:scale-110 active:scale-95 shadow-lg z-[60] border-2 border-white"
                         title="Delete"
                         type="button"
                       >
@@ -1254,49 +1282,64 @@ export function MyDiaryPage() {
              </div>
           </div>
 
-          {/* Footer */}
-          {!isExporting && (
-            <div className="h-14 flex items-center justify-between px-8 z-30 shrink-0 border-t relative" style={{ borderColor: activeTheme.colors.border }}>
-               <div className="flex items-center gap-6 z-10">
-                  <div className="flex flex-col">
-                    <div className="text-[10px] font-black uppercase tracking-widest opacity-40">Session</div>
-                    <div className="text-xs font-mono font-bold">{Math.floor(writingTime / 60)}m {writingTime % 60}s</div>
-                  </div>
-                  <div className="w-px h-6 bg-ink/10" />
-                  <div className="flex flex-col">
-                    <div className="text-[10px] font-black uppercase tracking-widest opacity-40">Volume</div>
-                    <div className="text-xs font-bold">{wordCount} words</div>
-                  </div>
-                  <div className="w-px h-6 bg-ink/10" />
-                  <div className="flex items-center gap-2">
-                    <button 
-                      onClick={() => setStatus(prev => prev === 'draft' ? 'final' : 'draft')}
-                      className={cn(
-                        "text-[10px] font-black uppercase tracking-widest px-2 py-0.5 rounded border transition-all",
-                        status === 'final' ? "bg-green-100 text-green-700 border-green-200" : "bg-ink/5 text-ink/40 border-ink/10"
-                      )}
-                    >
-                      {status === 'final' ? 'STABLE' : 'DRAFT'}
-                    </button>
-                    <button 
-                      onClick={() => setFocusMode(!isFocusMode)}
-                      className={cn(
-                        "flex items-center gap-1.5 px-3 py-1 rounded-full border border-ink/10 transition-all text-[10px] font-black uppercase tracking-wider group",
-                        isFocusMode ? "bg-ink text-white" : "bg-white text-ink-light hover:text-ink"
-                      )}
-                    >
-                      <Maximize size={10} className="group-hover:scale-110 transition-transform" />
-                      {isFocusMode ? 'Exit zen' : 'Mode Zen'}
-                    </button>
-                 </div>
-               </div>
-               <div className="hidden sm:block italic text-sm opacity-60 z-10 font-caveat">{activeQuote}</div>
+          {/* Minimal footer inside canvas — visible only during export */}
+          {isExporting && (
+            <div className="h-10 flex items-center justify-between px-8 z-30 shrink-0 border-t relative" style={{ borderColor: activeTheme.colors.border }}>
+               <div className="font-sans text-[9px] font-bold uppercase tracking-widest opacity-40">MoodStreak</div>
+               <div className="font-mono text-[9px] font-bold opacity-40">p.{pageNumber}</div>
             </div>
           )}
         </motion.div>
-
       </div>
     </div>
+
+    {/* Mobile-friendly Footer — outside scaled canvas, always full-size */}
+    {!isExporting && (
+      <div className={cn(
+        "shrink-0 border-t px-3 sm:px-6 pt-2 pb-24 sm:pb-2 flex items-center justify-between gap-2 z-50 transition-colors",
+        isDarkMode ? "bg-[#111216] border-stone-800 text-stone-300" : "bg-white border-stone-200 text-stone-800"
+      )}>
+        <div className="flex items-center gap-3 sm:gap-5 flex-wrap">
+          <div className="flex flex-col leading-tight">
+            <span className="text-[8px] font-black uppercase tracking-widest opacity-40">Session</span>
+            <span className="text-[11px] font-mono font-bold">{Math.floor(writingTime / 60)}m {writingTime % 60}s</span>
+          </div>
+          <div className="flex flex-col leading-tight">
+            <span className="text-[8px] font-black uppercase tracking-widest opacity-40">Words</span>
+            <span className="text-[11px] font-bold">{wordCount}</span>
+          </div>
+          <button
+            onClick={() => setStatus(prev => prev === 'draft' ? 'final' : 'draft')}
+            className={cn(
+              "text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded border transition-all",
+              status === 'final' ? "bg-green-100 text-green-700 border-green-200" : "bg-stone-50 text-stone-400 border-stone-200"
+            )}
+          >
+            {status === 'final' ? '? Final' : 'Draft'}
+          </button>
+        </div>
+        <div className="flex items-center gap-1.5 shrink-0">
+          <button
+            onClick={() => setFocusMode(!isFocusMode)}
+            className={cn(
+              "flex items-center gap-1 px-2 sm:px-3 py-1.5 rounded-xl border transition-all text-[9px] sm:text-[10px] font-black uppercase",
+              isFocusMode ? "bg-stone-900 text-white border-stone-900" : "bg-white text-stone-600 border-stone-200 hover:bg-stone-50"
+            )}
+          >
+            <Maximize size={10} />
+            <span className="hidden sm:inline ml-1">{isFocusMode ? 'Exit Zen' : 'Zen'}</span>
+          </button>
+          <button
+            onClick={downloadPage}
+            className="flex items-center gap-1 px-2 sm:px-3 py-1.5 rounded-xl border transition-all text-[9px] sm:text-[10px] font-black uppercase bg-white text-stone-600 border-stone-200 hover:bg-stone-50 active:scale-95"
+            title="Download Page as High-Res PNG"
+          >
+            <Download size={10} />
+            <span className="hidden sm:inline ml-1">Export</span>
+          </button>
+        </div>
+      </div>
+    )}
     </div>
   );
 }

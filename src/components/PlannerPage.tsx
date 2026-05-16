@@ -172,88 +172,84 @@ export function PlannerPage() {
   const goNextDay = () => setCurrentDate(addDays(currentDate, 1));
 
   return (
-    <div className="h-full flex flex-col pt-4 overflow-y-auto px-4">
+    <div className="h-full flex flex-col pt-4 overflow-y-auto px-3 sm:px-4">
       <div className="max-w-3xl w-full mx-auto pt-4 pb-24 relative flex flex-col">
-          <div className="relative z-10 bg-[#FDFBF7] rounded-[32px] shadow-[8px_8px_0px_#D9D1C1] border-2 border-[#2C2C2C] p-6 sm:p-10">
-            <div className="flex flex-col sm:flex-row items-baseline sm:items-center justify-between mb-8 pb-4 border-b-2 border-[#2C2C2C] gap-4 relative">
+          <div className="relative z-10 bg-[#FDFBF7] rounded-[24px] sm:rounded-[32px] shadow-[6px_6px_0px_#D9D1C1] sm:shadow-[8px_8px_0px_#D9D1C1] border-2 border-[#2C2C2C] p-4 sm:p-10">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 sm:mb-8 pb-4 border-b-2 border-[#2C2C2C] gap-4 relative">
                 <div>
-                  <h2 className="text-2xl font-playfair font-black tracking-tight italic text-ink sm:hidden">Daily Planner</h2>
+                  <h2 className="text-2xl font-playfair font-black tracking-tight italic text-ink">Daily Planner</h2>
                   <p className="text-ink-light font-sans text-[10px] uppercase tracking-[0.2em] mt-1 font-bold opacity-60">Focus on what matters</p>
                   <p className="text-[10px] font-serif italic text-rose-dark mt-2 border-l-2 border-rose-dark pl-3 max-w-sm opacity-70">"{activeQuote}"</p>
                 </div>
                 {/* Decorative Tape */}
-                <div className="absolute -top-12 -left-4 w-20 h-6 bg-[#E8D17E]/40 border border-[#2C2C2C]/10 rotate-6 mix-blend-multiply" />
+                <div className="absolute -top-10 -left-3 sm:-top-12 sm:-left-4 w-16 sm:w-20 h-5 sm:h-6 bg-[#E8D17E]/40 border border-[#2C2C2C]/10 rotate-6 mix-blend-multiply" />
                 
-                <div className="flex flex-col sm:items-end w-full sm:w-auto gap-3">
-                  <div className="flex flex-wrap items-center gap-2">
-                      <button onClick={addTemplateRoutine} className="text-xs font-bold font-sans flex items-center gap-1 bg-white px-3 py-2 rounded-xl border border-[var(--border-color)] shadow-sm hover:bg-cream transition-colors text-ink" title="Add Daily Routine Template">
-                          <Plus size={14} className="text-stone-400" /> Routine
-                      </button>
-                      <button onClick={migrateUnresolved} className="text-xs font-bold font-sans flex items-center gap-1 bg-white px-3 py-2 rounded-xl border border-[var(--border-color)] shadow-sm hover:bg-cream transition-colors text-ink" title="Migrate Unfinished to Tomorrow">
-                          <Forward size={14} className="text-rose-dark" fill="var(--rose-light)" /> Migrate
-                      </button>
-                  </div>
-                  <div className="flex flex-wrap items-center gap-2">
-                      <div className="flex items-center w-full sm:w-auto bg-white rounded-xl border border-[var(--border-color)] shadow-sm overflow-hidden sm:ml-2">
-                          <button onClick={goPrevDay} className="px-3 py-2 hover:bg-cream font-bold border-r border-[var(--border-color)] text-ink">&larr;</button>
-                          <div className="flex items-center justify-center flex-1 gap-2 px-4 py-2 pointer-events-none text-ink w-full sm:w-auto">
-                             <Calendar size={18} className="text-ink-light" />
-                             <span className="font-sans font-bold text-ink whitespace-nowrap text-sm">{format(currentDate, 'MMM d, yyyy')}</span>
-                          </div>
-                          <button onClick={goNextDay} className="px-3 py-2 hover:bg-cream font-bold border-l border-[var(--border-color)] text-ink">&rarr;</button>
-                      </div>
-                  </div>
+                <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
+                    <button onClick={addTemplateRoutine} className="text-xs font-bold font-sans flex items-center gap-1 bg-white px-3 py-2 rounded-xl border border-[var(--border-color)] shadow-sm hover:bg-cream transition-colors text-ink" title="Add Daily Routine Template">
+                        <Plus size={14} className="text-stone-400" /> Routine
+                    </button>
+                    <button onClick={migrateUnresolved} className="text-xs font-bold font-sans flex items-center gap-1 bg-white px-3 py-2 rounded-xl border border-[var(--border-color)] shadow-sm hover:bg-cream transition-colors text-ink" title="Migrate Unfinished to Tomorrow">
+                        <Forward size={14} className="text-rose-dark" fill="var(--rose-light)" /> Migrate
+                    </button>
+                    <div className="flex items-center flex-1 sm:flex-none bg-white rounded-xl border border-[var(--border-color)] shadow-sm overflow-hidden min-w-[200px]">
+                        <button onClick={goPrevDay} className="px-3 py-2 hover:bg-cream font-bold border-r border-[var(--border-color)] text-ink shrink-0">←</button>
+                        <div className="flex items-center justify-center flex-1 gap-1.5 px-3 py-2 pointer-events-none text-ink min-w-0">
+                           <Calendar size={15} className="text-ink-light shrink-0" />
+                           <span className="font-sans font-bold text-ink whitespace-nowrap text-xs sm:text-sm truncate">{format(currentDate, 'MMM d, yyyy')}</span>
+                        </div>
+                        <button onClick={goNextDay} className="px-3 py-2 hover:bg-cream font-bold border-l border-[var(--border-color)] text-ink shrink-0">→</button>
+                    </div>
                 </div>
             </div>
 
-            <div className="max-w-2xl w-full mx-auto space-y-8">
+            <div className="max-w-2xl w-full mx-auto space-y-6">
         {/* Input Card */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="relative group bg-cream p-6 rounded-3xl overflow-hidden border border-[var(--border-color)] shadow-sm"
+          className="relative group bg-cream p-4 sm:p-6 rounded-2xl sm:rounded-3xl overflow-hidden border border-[var(--border-color)] shadow-sm"
         >
-            <h3 className="font-sans text-xs font-bold uppercase tracking-widest text-ink-light mb-4">Add Task</h3>
-            <form onSubmit={addTask} className="space-y-4">
-              <div className="flex gap-3">
+            <h3 className="font-sans text-xs font-bold uppercase tracking-widest text-ink-light mb-3">Add Task</h3>
+            <form onSubmit={addTask} className="space-y-3">
+              <div className="flex gap-2">
                 <input
                   type="text"
                   value={newTaskText}
                   onChange={(e) => setNewTaskText(e.target.value)}
                   placeholder="What's on your mind?..."
-                  className="flex-1 bg-white border border-[var(--border-color)] rounded-xl px-4 py-3 font-serif text-xl focus:outline-none focus:ring-2 focus:ring-rose-dark transition-all placeholder:text-stone-400 text-ink shadow-sm"
+                  className="flex-1 bg-white border border-[var(--border-color)] rounded-xl px-3 py-2.5 font-serif text-lg sm:text-xl focus:outline-none focus:ring-2 focus:ring-rose-dark transition-all placeholder:text-stone-400 text-ink shadow-sm"
                 />
                 <button
                   type="submit"
                   disabled={!newTaskText.trim()}
-                  className="bg-ink text-white p-4 rounded-xl hover:scale-105 active:scale-95 transition-transform disabled:opacity-50 shadow-sm"
+                  className="bg-ink text-white p-3 sm:p-4 rounded-xl hover:scale-105 active:scale-95 transition-transform disabled:opacity-50 shadow-sm"
                 >
-                  <Plus size={24} />
+                  <Plus size={22} />
                 </button>
               </div>
-              <div className="flex flex-wrap items-center gap-4">
-                <div className="flex items-center gap-2 text-ink">
+              <div className="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-2 sm:gap-4">
+                <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 text-ink">
                     <span className="text-[10px] font-bold uppercase tracking-widest text-ink-light">Due:</span>
                     <input 
                         type="date" 
                         value={dueDate}
                         onChange={(e) => setDueDate(e.target.value)}
-                        className="bg-white border border-[var(--border-color)] rounded-lg px-2 py-1 text-xs font-sans font-bold focus:ring-1 focus:ring-ink outline-none"
+                        className="bg-white border border-[var(--border-color)] rounded-lg px-2 py-1.5 text-xs font-sans font-bold focus:ring-1 focus:ring-ink outline-none w-full"
                     />
                 </div>
-                <div className="flex items-center gap-2 text-ink">
+                <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 text-ink">
                     <span className="text-[10px] font-bold uppercase tracking-widest text-ink-light">Priority:</span>
                     <select 
                         value={priority}
                         onChange={(e) => setPriority(e.target.value as 'high' | 'medium' | 'low')}
-                        className="bg-white border border-[var(--border-color)] rounded-lg px-2 py-1 text-xs font-sans font-bold focus:ring-1 focus:ring-ink outline-none"
+                        className="bg-white border border-[var(--border-color)] rounded-lg px-2 py-1.5 text-xs font-sans font-bold focus:ring-1 focus:ring-ink outline-none w-full"
                     >
                         <option value="high">High</option>
                         <option value="medium">Medium</option>
                         <option value="low">Low</option>
                     </select>
                 </div>
-                <div className="flex items-center gap-2 text-ink relative flex-1 min-w-[150px]">
+                <div className="col-span-2 flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 text-ink">
                     <span className="text-[10px] font-bold uppercase tracking-widest flex items-center gap-1 text-ink-light"><TagIcon size={12}/> Tags:</span>
                     <div className="flex-1 flex items-center gap-1 flex-wrap bg-white border border-[var(--border-color)] rounded-lg px-2 py-1 focus-within:ring-1 focus-within:ring-ink">
                         {tags.map(t => (
@@ -317,7 +313,7 @@ export function PlannerPage() {
                         <div className="flex-1 flex flex-col cursor-pointer" onClick={() => setExpandedTask(expandedTask === task.id ? null : task.id)}>
                             <div className="flex items-center gap-2">
                                 <span className={cn(
-                                "font-serif text-2xl tracking-tight transition-all flex-1 text-ink",
+                                "font-serif text-lg sm:text-2xl tracking-tight transition-all flex-1 text-ink",
                                 task.completed && "line-through text-stone-400"
                                 )}>
                                 {task.text}
@@ -347,7 +343,7 @@ export function PlannerPage() {
 
                         <button 
                           onClick={(e) => { e.stopPropagation(); deleteTask(task.id); }}
-                          className="opacity-0 group-hover:opacity-100 p-2 text-red-400 hover:bg-red-50 rounded-lg transition-all"
+                          className="p-2 text-red-300 sm:opacity-0 sm:group-hover:opacity-100 hover:bg-red-50 hover:text-red-500 rounded-lg transition-all"
                         >
                           <Trash2 size={20} />
                         </button>
