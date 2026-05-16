@@ -41,7 +41,7 @@ const PAGE_SIZES = {
   Photo_5x7: { width: 750, height: 1050, label: 'Photo 5x7 (Portrait)' },
 };
 
-const PEN_COLORS = ['#2C2C2C', '#E87E7E', '#3B82F6', '#10B981', '#EAB308', '#A855F7', '#ffffff'];
+const PEN_COLORS = ['#F5A8D3', '#FECACA', '#F9C6FF', '#F6AEC7', '#FDE68A', '#A5B4FC', '#D8B4FE', '#FBCFE8', '#FEE2E2', '#F8F0FC', '#ffffff'];
 
 interface TextBox {
   id: string;
@@ -621,7 +621,7 @@ export function MyDiaryPage() {
 
   return (
     <div 
-      className={cn("h-full min-h-[500px] flex flex-col transition-colors font-sans rounded-2xl overflow-hidden", isDarkMode ? "text-stone-100" : "text-stone-900")}
+      className={cn("h-full min-h-[500px] flex flex-col transition-colors font-sans rounded-2xl overflow-visible", isDarkMode ? "text-stone-100" : "text-stone-900")}
       style={{ backgroundColor: getRootBgColor() }}
     >
       {/* Top Toolbar */}
@@ -700,9 +700,9 @@ export function MyDiaryPage() {
         </div>
 
         {/* Responsive Bento Grid Toolbar */}
-        <div className={cn("rounded-2xl border bg-opacity-50 backdrop-blur-sm shadow-sm w-full overflow-x-auto touch-pan-x custom-scrollbar pb-1", 
+        <div className={cn("rounded-2xl border bg-opacity-50 backdrop-blur-sm shadow-sm w-full overflow-x-auto touch-pan-x custom-scrollbar pb-1 overflow-visible", 
           isDarkMode ? "bg-stone-900/50 border-stone-800" : "bg-stone-50/50 border-stone-200")}>
-          <div className="flex flex-nowrap items-center justify-start sm:justify-between gap-2 p-1.5 min-w-0 w-full">
+          <div className="flex flex-nowrap items-center justify-start sm:justify-between gap-2 p-1.5 min-w-max w-full">
             {/* Group 1: Core Tools */}
             <div className="flex flex-wrap items-center gap-0.5 justify-center bg-white/40 p-1 rounded-xl border border-white/20 shrink-0">
               <div className="relative group/tt">
@@ -959,11 +959,23 @@ export function MyDiaryPage() {
                       ))}
                     </div>
                     <div className="flex items-center gap-2 shrink-0">
+                      <label className="flex items-center gap-2 rounded-full border border-stone-200 bg-white px-2 py-1 shadow-sm">
+                        <span className="text-[10px] font-bold text-stone-400 uppercase tracking-wider hidden sm:inline">Color</span>
+                        <input
+                          type="color"
+                          value={penColor}
+                          onChange={(e) => { setPenColor(e.target.value); setActiveTool('pen'); setDrawingMode(true); }}
+                          className="w-8 h-8 p-0 border-0 rounded-full cursor-pointer"
+                          title="Choose a custom pen color"
+                        />
+                      </label>
+                    </div>
+                    <div className="flex items-center gap-2 shrink-0">
                       <span className="text-[10px] font-bold text-stone-400">SIZE</span>
                       <input 
                         type="range" min="1" max="25" value={strokeWidth} 
                         onChange={(e) => setStrokeWidth(Number(e.target.value))}
-                        className="w-full max-w-[160px] sm:w-24 accent-stone-700 h-1 cursor-pointer"
+                        className="w-full max-w-[220px] sm:w-28 accent-stone-700 h-1 cursor-pointer"
                       />
                     </div>
                  </div>
@@ -978,7 +990,7 @@ export function MyDiaryPage() {
                       <input 
                         type="range" min="0" max="1" step="0.1" value={backgroundOpacity}
                         onChange={(e) => setBackgroundOpacity(Number(e.target.value))}
-                        className="w-full max-w-[160px] sm:w-24 accent-stone-700 h-1 cursor-pointer"
+                        className="w-full max-w-[220px] sm:w-28 accent-stone-700 h-1 cursor-pointer"
                         title="Adjust Background Opacity"
                       />
                       <span className="text-[10px] font-medium text-stone-500 w-6">{Math.round(backgroundOpacity * 100)}%</span>
