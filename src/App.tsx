@@ -152,7 +152,7 @@ export default function App() {
           <div className="mt-auto pb-8 flex flex-col items-center gap-4">
              <div className="w-8 h-px bg-[var(--border-color)] opacity-50" />
              <a 
-               href="https://razel.tech" 
+               href="https://razeltech.github.io/razeltech/" 
                target="_blank" 
                rel="noopener noreferrer"
                className="flex flex-col items-center gap-1 group transition-all"

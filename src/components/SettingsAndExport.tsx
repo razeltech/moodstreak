@@ -395,7 +395,7 @@ export function SettingsAndExport() {
               <div className="w-8 h-px bg-ink" />
            </div>
            <a 
-             href="https://razel.tech" 
+             href="https://razeltech.github.io/razeltech/" 
              target="_blank" 
              rel="noopener noreferrer"
              className="flex flex-col items-center group transition-all"
