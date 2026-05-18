@@ -60,6 +60,8 @@ export interface Settings {
   dailyWordGoal?: number;
   pageSizeId?: string;
   currency?: string;
+  globalMoodColor?: string;
+  customMoods?: Array<{ id: string; label: string; color: string }>;
 }
 
 export interface WeightLog {

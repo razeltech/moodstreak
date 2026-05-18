@@ -174,7 +174,7 @@ export function PlannerPage() {
   return (
     <div className="h-full flex flex-col pt-4 overflow-y-auto px-3 sm:px-4">
       <div className="max-w-3xl w-full mx-auto pt-4 pb-24 relative flex flex-col">
-          <div className="relative z-10 bg-[#FDFBF7] rounded-[24px] sm:rounded-[32px] shadow-[6px_6px_0px_#D9D1C1] sm:shadow-[8px_8px_0px_#D9D1C1] border-2 border-[#2C2C2C] p-4 sm:p-10">
+          <div className="relative z-10 bg-page-bg rounded-[24px] sm:rounded-[32px] shadow-[6px_6px_0px_var(--shadow-color)] sm:shadow-[8px_8px_0px_var(--shadow-color)] border-2 border-[#2C2C2C] p-4 sm:p-10">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 sm:mb-8 pb-4 border-b-2 border-[#2C2C2C] gap-4 relative">
                 <div>
                   <h2 className="text-2xl font-playfair font-black tracking-tight italic text-ink">Daily Planner</h2>

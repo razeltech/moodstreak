@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { Mic, MicOff, PenTool, Eraser, Type, Download, Maximize, FileText, PlusSquare, Trash2, GripHorizontal, X, Bold, Italic, Highlighter, AlignLeft, AlignCenter, AlignRight, AlignJustify, List, ListOrdered, Underline as UnderlineIcon, Trash, Star, Image as ImageIcon, ImagePlus, Sun, Moon, Palette, Smile, Cog, ChevronLeft, ChevronRight, Plus, Save, Check } from 'lucide-react';
+import { Mic, MicOff, PenTool, Eraser, Type, Download, Maximize, FileText, PlusSquare, Trash2, GripHorizontal, X, Bold, Italic, Highlighter, AlignLeft, AlignCenter, AlignRight, AlignJustify, List, ListOrdered, Underline as UnderlineIcon, Trash, Star, Image as ImageIcon, ImagePlus, Sun, Moon, Palette, Smile, Cog, ChevronLeft, ChevronRight, Plus, Save, Check, Hand, ZoomIn, ZoomOut } from 'lucide-react';
 import { ReactSketchCanvas, type ReactSketchCanvasRef } from 'react-sketch-canvas';
 import { cn } from '../lib/utils';
 import { AnimatePresence, motion } from 'motion/react';
@@ -253,6 +253,7 @@ export function MyDiaryPage() {
   const activeQuote = DAILY_DIARY_QUOTES[currentDate.getDate() % DAILY_DIARY_QUOTES.length];
 
   const settings = useLiveQuery(() => db.settings.get(1));
+  const allMoods = React.useMemo(() => [...MOODS, ...(settings?.customMoods || [])], [settings?.customMoods]);
   const entryList = useLiveQuery(() => db.entries.where('date').equals(formattedDate).toArray(), [formattedDate]);
   const allEntries = useLiveQuery(() => db.entries.toArray()) || [];
   
@@ -268,8 +269,8 @@ export function MyDiaryPage() {
 
   const [pageTitle, setPageTitle] = useState('Dear Diary');
   const [activeTheme, setActiveTheme] = useState<ScrapbookTheme>(SCRAPBOOK_THEMES[0]);
-  const [mood, setMood] = useState(MOODS[0]);
-  const [customColor, setCustomColor] = useState(MOODS[0].color);
+  const [mood, setMood] = useState(allMoods[0]);
+  const [customColor, setCustomColor] = useState(allMoods[0]?.color);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [pageSize, setPageSize] = useState<keyof typeof PAGE_SIZES>('A4');
   const [pageType, setPageType] = useState<'blank' | 'ruled' | 'grid' | 'dotted'>('ruled');
@@ -280,13 +281,15 @@ export function MyDiaryPage() {
   const [lastActivity, setLastActivity] = useState<number>(Date.now());
 
   const [isDrawingMode, setDrawingMode] = useState(false);
-  const [activeTool, setActiveTool] = useState<'type' | 'pen' | 'eraser'>('type');
+  const [activeTool, setActiveTool] = useState<'pan' | 'type' | 'pen' | 'eraser'>('type');
   const [penColor, setPenColor] = useState(PEN_COLORS[0]);
   const [strokeWidth, setStrokeWidth] = useState(3);
 
   const [activeEditor, setActiveEditor] = useState<any>(null);
 
   const [isListening, setIsListening] = useState(false);
+  const [speechLang, setSpeechLang] = useState('en-US');
+  const [showVoiceMenu, setShowVoiceMenu] = useState(false);
   const [text, setText] = useState('');
   const [isExporting, setIsExporting] = useState(false);
   
@@ -303,20 +306,25 @@ export function MyDiaryPage() {
   const canvasRef = useRef<ReactSketchCanvasRef>(null);
   const baseContentRef = useRef('');
   const pageRef = useRef<HTMLDivElement>(null);
+  const recognitionRef = useRef<any>(null);
+  const isListeningRef = useRef(false);
 
   const currentSize = PAGE_SIZES[pageSize];
 
   const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
 
-  // Responsive scale: shrink diary page to fit mobile screen
+  // Responsive scale: start with fit to screen, but allow changing
   const [pageScale, setPageScale] = useState(1);
+  const [isFitToScreen, setIsFitToScreen] = useState(true);
+
   useEffect(() => {
+    if (!isFitToScreen) return;
     const computeScale = () => {
       const vw = window.innerWidth;
       if (vw >= 768) {
         setPageScale(1);
       } else {
-        // Add 32px padding on each side
+        // Add padding
         const availableWidth = vw - 32;
         const scale = Math.min(1, availableWidth / currentSize.width);
         setPageScale(parseFloat(scale.toFixed(3)));
@@ -325,7 +333,21 @@ export function MyDiaryPage() {
     computeScale();
     window.addEventListener('resize', computeScale);
     return () => window.removeEventListener('resize', computeScale);
-  }, [currentSize.width]);
+  }, [currentSize.width, isFitToScreen]);
+
+  const handleZoomIn = () => {
+    setIsFitToScreen(false);
+    setPageScale(s => Math.min(3, s + 0.1));
+  };
+
+  const handleZoomOut = () => {
+    setIsFitToScreen(false);
+    setPageScale(s => Math.max(0.3, s - 0.1));
+  };
+
+  const handleFitScreen = () => {
+    setIsFitToScreen(true);
+  };
 
   // Calculate word count
   const wordCount = React.useMemo(() => {
@@ -363,7 +385,7 @@ export function MyDiaryPage() {
       setPageTitle(entry.title || 'Dear Diary');
       if (entry.content) setText(entry.content);
       if (entry.mood && entry.moodColor) {
-        setMood(MOODS.find(m => m.id === entry.mood) || MOODS[0]);
+        setMood(allMoods.find(m => m.id === entry.mood) || allMoods[0]);
       }
       if (entry.activeThemeId) {
         setActiveTheme(SCRAPBOOK_THEMES.find(t => t.id === entry.activeThemeId) || SCRAPBOOK_THEMES[0]);
@@ -396,7 +418,7 @@ export function MyDiaryPage() {
       setBackgroundImage(null);
       setBackgroundOpacity(1);
       setActiveTheme(SCRAPBOOK_THEMES[0]);
-      setMood(MOODS[0]);
+      setMood(allMoods[0]);
       setPageSize((settings?.pageSizeId as keyof typeof PAGE_SIZES) || 'A4');
       setPageType((settings?.paperStyle as any) || 'ruled');
       if (canvasRef.current) canvasRef.current.clearCanvas();
@@ -496,20 +518,39 @@ export function MyDiaryPage() {
     }
   };
 
+  useEffect(() => {
+    if (isListeningRef.current && recognitionRef.current) {
+      if (recognitionRef.current.lang !== speechLang) {
+        recognitionRef.current.stop();
+        isListeningRef.current = false;
+        setIsListening(false);
+        // Automatically restart with new language after a brief delay
+        setTimeout(() => {
+            toggleVoice();
+        }, 300);
+      }
+    }
+  }, [speechLang]);
+
   const toggleVoice = () => {
     if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
       alert('Speech recognition is not supported in this browser.');
       return;
     }
 
-    if (isListening) {
+    if (isListeningRef.current) {
+      isListeningRef.current = false;
       setIsListening(false);
+      recognitionRef.current?.stop();
     } else {
+      isListeningRef.current = true;
       setIsListening(true);
       baseContentRef.current = text;
       // @ts-ignore
       const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
       const recognition = new SpeechRecognition();
+      recognitionRef.current = recognition;
+      recognition.lang = speechLang;
       recognition.continuous = true;
       recognition.interimResults = true;
       
@@ -532,9 +573,29 @@ export function MyDiaryPage() {
         }
       };
 
-      recognition.onerror = () => setIsListening(false);
-      recognition.onend = () => setIsListening(false);
-      recognition.start();
+      recognition.onerror = (e: any) => {
+        if (e.error === 'not-allowed') {
+          isListeningRef.current = false;
+          setIsListening(false);
+        }
+      };
+      
+      recognition.onend = () => {
+        if (isListeningRef.current) {
+          try {
+            recognition.start();
+          } catch(err) {
+            isListeningRef.current = false;
+            setIsListening(false);
+          }
+        } else {
+          setIsListening(false);
+        }
+      };
+
+      try {
+        recognition.start();
+      } catch(err) {}
     }
   };
 
@@ -707,6 +768,16 @@ export function MyDiaryPage() {
             <div className="flex flex-wrap items-center gap-0.5 justify-center bg-white/40 p-1 rounded-xl border border-white/20 shrink-0">
               <div className="relative group/tt">
                 <button 
+                  onClick={() => { setDrawingMode(false); setActiveTool('pan'); }}
+                  className={cn("p-2 rounded-lg transition-all", activeTool === 'pan' ? (isDarkMode ? "bg-stone-100 text-stone-900" : "bg-stone-800 text-white") : "text-stone-400 hover:bg-stone-100")}
+                >
+                  <Hand size={16} />
+                </button>
+                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 px-2 py-1 bg-ink text-white text-[10px] font-bold rounded shadow-xl opacity-0 group-hover/tt:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-[120]">Pan / Move</div>
+              </div>
+
+              <div className="relative group/tt">
+                <button 
                   onClick={() => { setDrawingMode(false); setActiveTool('type'); }}
                   className={cn("p-2 rounded-lg transition-all", activeTool === 'type' ? (isDarkMode ? "bg-stone-100 text-stone-900" : "bg-stone-800 text-white") : "text-stone-400 hover:bg-stone-100")}
                 >
@@ -742,6 +813,29 @@ export function MyDiaryPage() {
                 </button>
                 <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 px-2 py-1 bg-ink text-white text-[10px] font-bold rounded shadow-xl opacity-0 group-hover/tt:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-[120]">Eraser</div>
               </div>
+
+              {/* Stroke / Eraser Size Slider */}
+              {isDrawingMode && (
+                <div className="flex items-center gap-2 ml-2 mr-1">
+                  <input 
+                    type="range" 
+                    min="1" 
+                    max={activeTool === 'eraser' ? 30 : 15} 
+                    value={strokeWidth} 
+                    onPointerDown={e => e.stopPropagation()}
+                    onChange={e => setStrokeWidth(parseInt(e.target.value))} 
+                    className="w-16 sm:w-20 h-1.5 bg-stone-200 rounded-lg appearance-none cursor-pointer accent-stone-700"
+                    title={`${activeTool === 'eraser' ? 'Eraser' : 'Pen'} Size`}
+                  />
+                  <div className="w-6 h-6 flex items-center justify-center shrink-0 relative">
+                     {activeTool === 'eraser' ? (
+                       <div className="rounded-full border-2 border-stone-400 bg-white" style={{ width: Math.max(4, strokeWidth * 0.8), height: Math.max(4, strokeWidth * 0.8) }} />
+                     ) : (
+                       <div className="rounded-full bg-stone-800" style={{ width: Math.max(2, strokeWidth), height: Math.max(2, strokeWidth) }} />
+                     )}
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Group 2: Elements */}
@@ -797,10 +891,43 @@ export function MyDiaryPage() {
               </div>
               
               <div className="relative group/tt">
-                <button onClick={toggleVoice} className={cn("p-2 rounded-lg transition-all", isListening ? "bg-red-500 text-white animate-pulse" : "text-stone-400 hover:bg-stone-100")}>
-                  {isListening ? <Mic size={16} /> : <MicOff size={16} />}
-                </button>
-                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 px-2 py-1 bg-ink text-white text-[10px] font-bold rounded shadow-xl opacity-0 group-hover/tt:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-[120]">Voice</div>
+                <div className="flex bg-white/40 rounded-lg p-0.5" style={{ backgroundColor: showVoiceMenu ? 'var(--accent-color)' : undefined }}>
+                  <button onClick={toggleVoice} className={cn("p-2 rounded-lg transition-all", isListening ? "bg-red-500 text-white animate-pulse" : (showVoiceMenu ? "text-white" : "text-stone-400 hover:bg-stone-100"))}>
+                    {isListening ? <Mic size={16} /> : <MicOff size={16} />}
+                  </button>
+                  <button onClick={() => setShowVoiceMenu(!showVoiceMenu)} className={cn("px-1 flex flex-col items-center justify-center rounded-lg transition-all text-[8px] font-black uppercase text-stone-400 hover:bg-stone-100", showVoiceMenu && "text-white hover:bg-white/20")}>
+                     {speechLang.split('-')[0]}
+                  </button>
+                </div>
+                {!showVoiceMenu && <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 px-2 py-1 bg-ink text-white text-[10px] font-bold rounded shadow-xl opacity-0 group-hover/tt:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-[120]">Voice & Lang</div>}
+                
+                <AnimatePresence>
+                  {showVoiceMenu && (
+                    <motion.div 
+                      className={cn("absolute top-full left-1/2 -translate-x-1/2 mt-2 shadow-2xl rounded-2xl p-2 z-[100] w-[140px] border flex flex-col gap-1", isDarkMode ? "bg-[#111216] border-stone-800" : "bg-white border-stone-200")}
+                    >
+                       <h3 className="text-[10px] uppercase font-bold text-stone-400 mb-1 ml-2 tracking-widest mt-1">Language</h3>
+                       {[
+                         {code: 'en-US', label: 'English'},
+                         {code: 'es-ES', label: 'Español'},
+                         {code: 'fr-FR', label: 'Français'},
+                         {code: 'de-DE', label: 'Deutsch'},
+                         {code: 'it-IT', label: 'Italiano'},
+                         {code: 'ja-JP', label: '日本語'},
+                         {code: 'hi-IN', label: 'Hindi'},
+                         {code: 'te-IN', label: 'Telugu'}
+                       ].map(lang => (
+                         <button 
+                            key={lang.code}
+                            onClick={() => { setSpeechLang(lang.code); setShowVoiceMenu(false); }}
+                            className={cn("text-left text-sm px-3 py-2 rounded-lg transition-colors", speechLang === lang.code ? "bg-stone-100 text-stone-900 font-bold" : "text-stone-500 hover:bg-stone-50")}
+                         >
+                           {lang.label}
+                         </button>
+                       ))}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
             </div>
 
@@ -823,7 +950,7 @@ export function MyDiaryPage() {
                       exit={{ opacity: 0, y: 10 }}
                       className={cn("absolute top-full left-0 mt-2 shadow-2xl rounded-2xl p-4 z-[100] w-[240px] border grid grid-cols-5 gap-1", isDarkMode ? "bg-[#111216] border-stone-800" : "bg-white border-stone-200")}
                     >
-                      {MOODS.map(m => (
+                      {allMoods.map(m => (
                         <button
                           key={m.id}
                           onClick={() => { setMood(m); setCustomColor(m.color); setShowMoods(false); }}
@@ -924,6 +1051,39 @@ export function MyDiaryPage() {
                   <Trash size={16} />
                 </button>
                 <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 px-2 py-1 bg-ink text-white text-[10px] font-bold rounded shadow-xl opacity-0 group-hover/tt:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-[120]">Clear</div>
+              </div>
+            </div>
+
+            {/* Group 4: Zoom Controls */}
+            <div className="flex flex-wrap items-center gap-0.5 justify-center sm:justify-center bg-white/40 p-1 rounded-xl border border-white/20 shrink-0">
+              <div className="relative group/tt">
+                <button 
+                  onClick={handleZoomOut} 
+                  className="p-2 rounded-lg text-stone-400 hover:bg-stone-100 transition-all font-mono text-[10px]"
+                >
+                  <ZoomOut size={16} />
+                </button>
+                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 px-2 py-1 bg-ink text-white text-[10px] font-bold rounded shadow-xl opacity-0 group-hover/tt:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-[120]">Zoom Out</div>
+              </div>
+
+              <div className="relative group/tt">
+                <button 
+                  onClick={handleFitScreen} 
+                  className={cn("px-2 py-1.5 rounded-lg transition-all font-mono text-[10px] uppercase font-black tracking-widest", isFitToScreen ? "bg-stone-800 text-white" : "text-stone-400 hover:bg-stone-100")}
+                >
+                  {Math.round(pageScale * 100)}%
+                </button>
+                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 px-2 py-1 bg-ink text-white text-[10px] font-bold rounded shadow-xl opacity-0 group-hover/tt:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-[120]">Fit Screen</div>
+              </div>
+
+              <div className="relative group/tt">
+                <button 
+                  onClick={handleZoomIn} 
+                  className="p-2 rounded-lg text-stone-400 hover:bg-stone-100 transition-all font-mono text-[10px]"
+                >
+                  <ZoomIn size={16} />
+                </button>
+                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 px-2 py-1 bg-ink text-white text-[10px] font-bold rounded shadow-xl opacity-0 group-hover/tt:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-[120]">Zoom In</div>
               </div>
             </div>
           </div>
@@ -1095,20 +1255,18 @@ export function MyDiaryPage() {
       </AnimatePresence>
 
       {/* Main Workspace */}
-      <div className={cn("flex-1 min-h-0 min-w-0 overflow-y-auto p-4 sm:p-8 pb-24 sm:pb-8 transition-colors bg-stone-200/30 touch-auto scroll-smooth custom-scrollbar")}>
+      <div className={cn("flex-1 min-h-0 min-w-0 overflow-auto p-4 sm:p-8 pb-32 sm:pb-8 transition-colors bg-stone-200/30 touch-auto sm:scroll-smooth custom-scrollbar")} style={{ WebkitOverflowScrolling: 'touch' }}>
         <div
-          className="flex justify-start sm:justify-center items-start"
+          className="flex justify-start sm:justify-center items-start min-w-max"
           style={{
-            width: pageScale < 1 ? currentSize.width * pageScale : '100%',
-            minWidth: pageScale < 1 ? currentSize.width * pageScale : undefined,
-            height: currentSize.height * pageScale,
+            minHeight: '100%',
           }}
         >
           <motion.div 
             ref={pageRef}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="relative shadow-2xl border flex flex-col shrink-0 overflow-hidden rounded-sm"
+            className="relative shadow-2xl border flex flex-col shrink-0 overflow-hidden rounded-sm mx-auto sm:mx-0"
             style={{ 
                width: currentSize.width, 
                height: currentSize.height, 
@@ -1118,6 +1276,7 @@ export function MyDiaryPage() {
                color: activeTheme.colors.text,
                transformOrigin: 'top left',
                transform: `scale(${pageScale})`,
+               marginBottom: currentSize.height * (pageScale - 1)
             }}
           >
           {/* Active Theme Base Pattern / Texture */}
@@ -1279,9 +1438,14 @@ export function MyDiaryPage() {
 
              {/* Sketch Canvas */}
              <div className={cn(
-                "absolute inset-0 z-20",
+                "absolute inset-0 z-20 [&_svg]:!cursor-inherit",
                 !isDrawingMode ? "pointer-events-none opacity-50" : "pointer-events-auto opacity-100"
-             )}>
+             )}
+             style={{
+                cursor: isDrawingMode 
+                    ? `url('data:image/svg+xml;utf8,<svg width="${Object.is(activeTool, 'eraser') ? strokeWidth * 4 : Math.max(8, strokeWidth)}" height="${Object.is(activeTool, 'eraser') ? strokeWidth * 4 : Math.max(8, strokeWidth)}" viewBox="0 0 ${Object.is(activeTool, 'eraser') ? strokeWidth * 4 : Math.max(8, strokeWidth)} ${Object.is(activeTool, 'eraser') ? strokeWidth * 4 : Math.max(8, strokeWidth)}" xmlns="http://www.w3.org/2000/svg"><circle cx="${(Object.is(activeTool, 'eraser') ? strokeWidth * 4 : Math.max(8, strokeWidth))/2}" cy="${(Object.is(activeTool, 'eraser') ? strokeWidth * 4 : Math.max(8, strokeWidth))/2}" r="${(Object.is(activeTool, 'eraser') ? strokeWidth * 4 : Math.max(8, strokeWidth))/2 - 1}" fill="${Object.is(activeTool, 'eraser') ? 'none' : penColor.replace('#', '%23')}" stroke="${Object.is(activeTool, 'eraser') ? 'black' : penColor.replace('#', '%23')}" stroke-width="1"/></svg>') ${(Object.is(activeTool, 'eraser') ? strokeWidth * 4 : Math.max(8, strokeWidth))/2} ${(Object.is(activeTool, 'eraser') ? strokeWidth * 4 : Math.max(8, strokeWidth))/2}, crosshair`
+                    : undefined
+             }}>
                 <ReactSketchCanvas
                     ref={canvasRef}
                     strokeWidth={strokeWidth}

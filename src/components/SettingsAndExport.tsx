@@ -13,9 +13,9 @@ export function SettingsAndExport() {
   const settings = useLiveQuery(() => db.settings.get(1));
   const [isWipeDialogOpen, setIsWipeDialogOpen] = useState(false);
 
-  const updateSetting = async (key: string, value: string | number | boolean) => {
+  const updateSetting = async (key: keyof typeof settings, value: any) => {
     if (settings) {
-      await db.settings.update(1, { [key]: value });
+      await db.settings.update(1, { [key]: value } as any);
     }
   };
 
@@ -123,7 +123,7 @@ export function SettingsAndExport() {
           <div className="md:col-span-8 flex flex-col gap-8">
             
             {/* Profile Section */}
-            <section className="bg-[#FDFBF7] rounded-[32px] shadow-[8px_8px_0px_#D9D1C1] border-2 border-[#2C2C2C] p-8 relative overflow-hidden group">
+            <section className="bg-page-bg rounded-[32px] shadow-[8px_8px_0px_var(--shadow-color)] border-2 border-[#2C2C2C] p-8 relative overflow-hidden group">
               <div className="absolute top-0 right-0 w-32 h-32 bg-rose-light/10 rounded-full -mr-16 -mt-16 transition-transform group-hover:scale-110" />
               <div className="relative z-10">
                 <div className="flex items-center gap-3 mb-6 pb-2 border-b-2 border-ink/5">
@@ -232,7 +232,7 @@ export function SettingsAndExport() {
             </section>
 
             {/* Typography & Design */}
-            <section className="bg-[#FDFBF7] rounded-[32px] shadow-[8px_8px_0px_#D9D1C1] border-2 border-[#2C2C2C] p-8 relative">
+            <section className="bg-page-bg rounded-[32px] shadow-[8px_8px_0px_var(--shadow-color)] border-2 border-[#2C2C2C] p-8 relative">
                {/* Decorative Tape */}
               <div className="absolute -top-4 -left-4 w-20 h-6 bg-[#E8D17E]/40 border border-ink/10 rotate-6 mix-blend-multiply" />
               
@@ -339,7 +339,7 @@ export function SettingsAndExport() {
           <div className="md:col-span-4 flex flex-col gap-8">
             
             {/* Security Section */}
-            <section className="bg-[#FDFBF7] rounded-[32px] shadow-[8px_8px_0px_#D9D1C1] border-2 border-[#2C2C2C] p-6 relative overflow-hidden">
+            <section className="bg-page-bg rounded-[32px] shadow-[8px_8px_0px_var(--shadow-color)] border-2 border-[#2C2C2C] p-6 relative overflow-hidden">
                <div className="absolute top-0 right-0 w-24 h-24 bg-ink/5 rounded-full -mr-12 -mt-12" />
                <h3 className="text-lg font-playfair font-black text-ink italic mb-6">Security</h3>
                
@@ -386,7 +386,7 @@ export function SettingsAndExport() {
             </section>
 
             {/* Export & Actions */}
-            <section className="bg-[#FDFBF7] rounded-[32px] shadow-[8px_8px_0px_#D9D1C1] border-2 border-[#2C2C2C] p-6 relative">
+            <section className="bg-page-bg rounded-[32px] shadow-[8px_8px_0px_var(--shadow-color)] border-2 border-[#2C2C2C] p-6 relative">
               <h3 className="text-lg font-playfair font-black text-ink italic mb-6">Utilities</h3>
               
               <div className="space-y-3">

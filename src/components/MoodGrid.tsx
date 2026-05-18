@@ -143,7 +143,7 @@ export function MoodGrid() {
   return (
     <div className="h-full flex flex-col pt-4 pb-20 px-4 relative overflow-y-auto">
       <div className="max-w-7xl w-full mx-auto pt-4 relative flex flex-col">
-        <div className="relative z-10 bg-[#FDFBF7] rounded-[32px] shadow-[8px_8px_0px_#D9D1C1] border-2 border-[#2C2C2C] p-6 sm:p-10">
+        <div className="relative z-10 bg-page-bg rounded-[32px] shadow-[8px_8px_0px_var(--shadow-color)] border-2 border-[#2C2C2C] p-6 sm:p-10">
           <div className="flex flex-col mb-8 pb-4 border-b-2 border-[#2C2C2C]">
             <div className="flex items-center gap-2 mb-1">
               <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-ink-light opacity-60">

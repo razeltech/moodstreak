@@ -14,6 +14,8 @@
   --color-gold-light: var(--gold-light);
   --color-cream: var(--cream);
   --color-warm-white: var(--warm-white);
+  --color-page-bg: var(--page-bg);
+  --color-shadow: var(--shadow-color);
   --color-ink: var(--ink);
   --color-ink-light: var(--ink-light);
   
@@ -71,6 +73,8 @@
     --ink: #3D2B3D;
     --ink-light: #6B5B6B;
     --border-color: rgba(180,140,160,0.2);
+    --page-bg: #FDFBF7;
+    --shadow-color: #D9D1C1;
     --mood-happy: #F9C74F;
     --mood-calm: #90DBF4;
     --mood-sad: #A0C4FF;
@@ -225,7 +229,7 @@
 }
 
 body {
-  background-color: #f3f4f6; /* Default gray bg */
+  background-color: var(--cream);
   color: #1f2937;
   overflow-x: hidden;
 }

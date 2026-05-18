@@ -60,6 +60,8 @@ export default function App() {
     return currentStreak;
   }, [entries]);
   
+  const recentEntry = useLiveQuery(() => db.entries.orderBy('date').reverse().first());
+
   useEffect(() => {
     if (settings?.uiTheme) {
       document.body.className = `theme-${settings.uiTheme}`;
@@ -67,12 +69,37 @@ export default function App() {
     if (settings?.activeFont) {
         document.documentElement.style.setProperty('--global-font', settings.activeFont);
     }
-    if (settings?.accentColor) {
-        document.documentElement.style.setProperty('--accent-color', settings.accentColor);
+    
+    // Dynamic theme based on global setting or most recent mood color!
+    const appMoodColor = (settings as any)?.globalMoodColor || recentEntry?.moodColor;
+    
+    const root = document.documentElement;
+    if (appMoodColor && appMoodColor !== '#FFFFFF') {
+        root.style.setProperty('--accent-color', appMoodColor);
+        root.style.setProperty('--rose-dark', appMoodColor);
+        
+        // Use color-mix for vibrant but themed colors (supported in all modern browsers)
+        root.style.setProperty('--cream', `color-mix(in srgb, ${appMoodColor}, white 88%)`); 
+        root.style.setProperty('--rose-light', `color-mix(in srgb, ${appMoodColor}, white 80%)`);
+        root.style.setProperty('--page-bg', `color-mix(in srgb, ${appMoodColor}, white 85%)`);
+        root.style.setProperty('--warm-white', `color-mix(in srgb, ${appMoodColor}, white 96%)`);
+        root.style.setProperty('--shadow-color', `color-mix(in srgb, ${appMoodColor}, #000 15%)`); 
     } else {
-        document.documentElement.style.setProperty('--accent-color', 'var(--rose-dark)');
+        // Reset dynamic mood styling for neutral/none
+        root.style.removeProperty('--rose-dark');
+        root.style.removeProperty('--cream');
+        root.style.removeProperty('--rose-light');
+        root.style.removeProperty('--page-bg');
+        root.style.removeProperty('--warm-white');
+        root.style.removeProperty('--shadow-color');
+
+        if (settings?.accentColor) {
+            root.style.setProperty('--accent-color', settings.accentColor);
+        } else {
+            root.style.setProperty('--accent-color', 'var(--rose-dark)');
+        }
     }
-  }, [settings?.uiTheme, settings?.activeFont, settings?.accentColor]);
+  }, [settings?.uiTheme, settings?.activeFont, settings?.accentColor, recentEntry?.moodColor, (settings as any)?.globalMoodColor]);
 
   if (settings && !settings.onboarded) {
     return <WelcomeScreen onComplete={() => window.location.reload()} />;

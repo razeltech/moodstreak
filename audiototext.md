@@ -99,28 +99,10 @@ Use a button to trigger the toggle, with visual feedback (pulsing icon) when act
 
 ---
 
-## 5. Advanced Alternative: Gemini API (Server-Side)
-For a more robust solution that supports audio file uploads (MP3, WAV) and superior transcription accuracy (even via multi-modal reasoning), use the **Gemini 2.0 Flash** model via the `@google/genai` SDK.
-
-### Implementation Pattern:
-1. **Frontend**: Record audio using `MediaRecorder` API and send the Blob/Base64 to your backend.
-2. **Backend**:
-   ```typescript
-   import { GoogleGenAI } from "@google/genai";
-   const genAI = new GoogleGenAI(process.env.GEMINI_API_KEY!);
-   const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
-
-   const result = await model.generateContent([
-     { inlineData: { data: audioBase64, mimeType: "audio/wav" } },
-     "Transcribe this audio exactly into text."
-   ]);
-   console.log(result.response.text());
-   ```
-
-## 6. Common Pitfalls
+## 5. Common Pitfalls
 1. **Auto-Stop**: Some browsers stop the recognition if the user is silent for too long. Ensure `onend` correctly updates the `isListening` state.
 2. **Grammar/Accents**: These vary by browser engine. Native Web Speech is usually tuned to the OS primary language.
 3. **Mobile Issues**: On iOS/Android, microphone access inside iframes or webviews can be restrictive. Ensure `metadata.json` includes `microphone` in `requestFramePermissions`.
 
 ---
-*Created for: MoodStreak / AI Journaling App*
+*Created for: MoodStreak / Journaling App*

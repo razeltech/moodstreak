@@ -215,7 +215,7 @@ export function DraggableElement({
                 <div className="w-0.5 h-4 bg-[#2C2C2C]" />
                 <button
                     onPointerDown={(e) => handleTransform('rotate', e)}
-                    className="p-1 bg-[#FDFBF7] text-[#2C2C2C] rounded-full border-2 border-[#2C2C2C] shadow-sm cursor-alias hover:bg-[#E8E4D9]"
+                    className="p-1 bg-page-bg text-[#2C2C2C] rounded-full border-2 border-[#2C2C2C] shadow-sm cursor-alias hover:bg-page-bg/80"
                 >
                     <RotateCw size={14} />
                 </button>
@@ -224,24 +224,24 @@ export function DraggableElement({
              {/* Resize Handle */}
              <button
                 onPointerDown={(e) => handleTransform('resize', e)}
-                className="absolute -bottom-4 -right-4 p-1.5 bg-[#FDFBF7] text-[#2C2C2C] rounded-full border-2 border-[#2C2C2C] shadow-md pointer-events-auto cursor-nwse-resize hover:bg-[#E8E4D9]"
+                className="absolute -bottom-4 -right-4 p-1.5 bg-page-bg text-[#2C2C2C] rounded-full border-2 border-[#2C2C2C] shadow-md pointer-events-auto cursor-nwse-resize hover:bg-page-bg/80"
              >
                 <Maximize2 size={14} />
              </button>
 
              {/* layer order buttons */}
              <div className="absolute top-1/2 -left-10 -translate-y-1/2 flex flex-col gap-2 pointer-events-auto">
-               <button onClick={(e) => { e.stopPropagation(); if(onBringToFront) onBringToFront(); }} className="w-8 h-8 flex items-center justify-center bg-white rounded-full border-2 border-[#2C2C2C] shadow-sm hover:bg-[#F4F1EA]">
+               <button onClick={(e) => { e.stopPropagation(); if(onBringToFront) onBringToFront(); }} className="w-8 h-8 flex items-center justify-center bg-white rounded-full border-2 border-[#2C2C2C] shadow-sm hover:bg-cream">
                  <div className="text-[8px] font-black underline">UP</div>
                </button>
-               <button onClick={(e) => { e.stopPropagation(); if(onSendToBack) onSendToBack(); }} className="w-8 h-8 flex items-center justify-center bg-white rounded-full border-2 border-[#2C2C2C] shadow-sm hover:bg-[#F4F1EA]">
+               <button onClick={(e) => { e.stopPropagation(); if(onSendToBack) onSendToBack(); }} className="w-8 h-8 flex items-center justify-center bg-white rounded-full border-2 border-[#2C2C2C] shadow-sm hover:bg-cream">
                  <div className="text-[8px] font-black overline">DN</div>
                </button>
              </div>
 
              {/* Text Controls */}
              {isText && (
-               <div className="absolute -bottom-16 left-1/2 -translate-x-1/2 flex items-center gap-1 bg-[#FDFBF7] p-2 rounded-xl border-2 border-[#2C2C2C] shadow-[4px_4px_0px_#2C2C2C] pointer-events-auto">
+               <div className="absolute -bottom-16 left-1/2 -translate-x-1/2 flex items-center gap-1 bg-page-bg p-2 rounded-xl border-2 border-[#2C2C2C] shadow-[4px_4px_0px_#2C2C2C] pointer-events-auto">
                  <button onClick={(e) => { e.stopPropagation(); onUpdate({ isBold: !isBold }); }} className={cn("px-2 py-1 font-serif font-bold rounded", isBold ? "bg-[#E8D17E]" : "hover:bg-[#E8E4D9]")}>B</button>
                  <button onClick={(e) => { e.stopPropagation(); onUpdate({ isItalic: !isItalic }); }} className={cn("px-2 py-1 font-serif italic rounded", isItalic ? "bg-[#E8D17E]" : "hover:bg-[#E8E4D9]")}>I</button>
                  <button onClick={(e) => { e.stopPropagation(); onUpdate({ isUnderline: !isUnderline }); }} className={cn("px-2 py-1 font-serif underline rounded", isUnderline ? "bg-[#E8D17E]" : "hover:bg-[#E8E4D9]")}>U</button>

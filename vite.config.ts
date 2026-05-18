@@ -15,7 +15,7 @@ export default defineConfig(({mode}) => {
         workbox: {
           maximumFileSizeToCacheInBytes: 5 * 1024 * 1024
         },
-        includeAssets: ['favicon.png', 'apple-touch-icon.png'],
+        includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'mask-icon.svg'],
         manifest: {
           name: 'MoodStreak',
           short_name: 'MoodStreak',
@@ -41,12 +41,12 @@ export default defineConfig(({mode}) => {
               purpose: 'any maskable'
             }
           ]
-        },
-        devOptions: {
-          enabled: true
         }
       })
     ],
+    define: {
+      'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY),
+    },
     resolve: {
       alias: {
         '@': path.resolve(__dirname, '.'),

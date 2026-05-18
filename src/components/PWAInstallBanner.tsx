@@ -58,7 +58,7 @@ export default function PWAInstallBanner() {
         exit={{ y: 100, opacity: 0 }}
         className="fixed bottom-24 md:bottom-8 left-4 right-4 md:left-auto md:right-8 md:w-80 z-50"
       >
-        <div className="bg-[#FDFBF7] border-2 border-ink rounded-[32px] shadow-[8px_8px_0px_#D9D1C1] p-6 flex flex-col gap-4 relative overflow-hidden group">
+        <div className="bg-page-bg border-2 border-ink rounded-[32px] shadow-[8px_8px_0px_var(--shadow-color)] p-6 flex flex-col gap-4 relative overflow-hidden group">
           {/* Decorative Sparkle */}
           <div className="absolute -top-2 -right-2 text-rose-dark opacity-20 group-hover:rotate-12 transition-transform">
             <Sparkles size={40} />

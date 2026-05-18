@@ -46,7 +46,7 @@ export function WelcomeScreen({ onComplete }: { onComplete: () => void }) {
   };
 
   return (
-    <div className="fixed inset-0 bg-[#F4F1EA] z-[100] flex items-center justify-center p-6 overflow-y-auto">
+    <div className="fixed inset-0 bg-cream z-[100] flex items-center justify-center p-6 overflow-y-auto">
       <div className="absolute inset-0 opacity-10 pointer-events-none" style={{ backgroundImage: 'radial-gradient(#000 0.5px, transparent 0.5px)', backgroundSize: '20px 20px' }}></div>
       
       <div className="w-full max-w-md py-10">
@@ -57,7 +57,7 @@ export function WelcomeScreen({ onComplete }: { onComplete: () => void }) {
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -20 }}
-              className="bg-[#FDFBF7] border-2 border-[#2C2C2C] shadow-[12px_12px_0px_#D9D1C1] rounded-[40px] p-8 sm:p-10 relative overflow-hidden"
+              className="bg-page-bg border-2 border-[#2C2C2C] shadow-[12px_12px_0px_var(--shadow-color)] rounded-[40px] p-8 sm:p-10 relative overflow-hidden"
             >
               <div className="absolute top-0 right-0 w-24 h-24 bg-[#E8D17E] border-l-2 border-b-2 border-[#2C2C2C] rounded-bl-[40px] flex items-center justify-center rotate-3 translate-x-4 -translate-y-4">
                  <div className="relative">
@@ -79,14 +79,14 @@ export function WelcomeScreen({ onComplete }: { onComplete: () => void }) {
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="Enter your name..."
-                    className="w-full bg-[#F4F1EA] border-2 border-[#2C2C2C] rounded-2xl px-5 py-4 font-serif text-xl focus:outline-none focus:shadow-[6px_6px_0px_#2C2C2C] transition-all placeholder:text-[#A0998E]/40"
+                    className="w-full bg-cream border-2 border-[#2C2C2C] rounded-2xl px-5 py-4 font-serif text-xl focus:outline-none focus:shadow-[6px_6px_0px_#2C2C2C] transition-all placeholder:text-[#A0998E]/40"
                   />
                 </div>
 
                 <button
                   onClick={() => name.trim() && setStep(2)}
                   disabled={!name.trim()}
-                  className="w-full bg-[#2C2C2C] text-[#FDFBF7] py-5 rounded-2xl font-sans font-black tracking-widest text-xs flex items-center justify-center gap-2 hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_#D9D1C1] active:translate-y-0 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full bg-[#2C2C2C] text-page-bg py-5 rounded-2xl font-sans font-black tracking-widest text-xs flex items-center justify-center gap-2 hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_var(--shadow-color)] active:translate-y-0 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   NEXT STEP <ArrowRight size={18} />
                 </button>
@@ -104,17 +104,17 @@ export function WelcomeScreen({ onComplete }: { onComplete: () => void }) {
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -20 }}
-              className="bg-[#FDFBF7] border-2 border-[#2C2C2C] shadow-[12px_12px_0px_#D9D1C1] rounded-[40px] p-8 sm:p-10 relative overflow-hidden"
+              className="bg-page-bg border-2 border-[#2C2C2C] shadow-[12px_12px_0px_var(--shadow-color)] rounded-[40px] p-8 sm:p-10 relative overflow-hidden"
             >
               <button 
                 onClick={() => setStep(1)}
-                className="absolute top-6 left-6 p-2 hover:bg-[#F4F1EA] rounded-full transition-colors"
+                className="absolute top-6 left-6 p-2 hover:bg-cream rounded-full transition-colors"
               >
                 <ArrowLeft size={20} className="text-[#A0998E]" />
               </button>
 
               <div className="flex flex-col items-center mt-6 mb-8">
-                 <div className="w-16 h-16 bg-[#F4F1EA] rounded-2xl border-2 border-[#2C2C2C] flex items-center justify-center text-[#2C2C2C] mb-4 shadow-[4px_4px_0px_#D9D1C1]">
+                 <div className="w-16 h-16 bg-cream rounded-2xl border-2 border-[#2C2C2C] flex items-center justify-center text-[#2C2C2C] mb-4 shadow-[4px_4px_0px_var(--shadow-color)]">
                     <Book size={32} />
                  </div>
                  <h2 className="text-2xl font-black italic text-[#2C2C2C]">Design your Canvas</h2>
@@ -139,7 +139,7 @@ export function WelcomeScreen({ onComplete }: { onComplete: () => void }) {
                     )}
                     <div className="text-xs font-black text-[#2C2C2C]">{p.name}</div>
                     <div 
-                      className="border border-[#2C2C2C] bg-[#F4F1EA] rounded shadow-[2px_2px_0px_#2C2C2C]"
+                      className="border border-[#2C2C2C] bg-cream rounded shadow-[2px_2px_0px_#2C2C2C]"
                       style={{ 
                         width: '40px', 
                         height: `${Math.min(60, (p.h / p.w) * 40)}px`,
@@ -170,7 +170,7 @@ export function WelcomeScreen({ onComplete }: { onComplete: () => void }) {
 
               <button
                 onClick={() => setStep(3)}
-                className="w-full bg-[#2C2C2C] text-[#FDFBF7] py-5 rounded-2xl font-sans font-black tracking-widest text-xs flex items-center justify-center gap-2 hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_#D9D1C1] transition-all"
+                className="w-full bg-[#2C2C2C] text-page-bg py-5 rounded-2xl font-sans font-black tracking-widest text-xs flex items-center justify-center gap-2 hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_var(--shadow-color)] transition-all"
               >
                 NEXT STEP <ArrowRight size={18} />
               </button>
@@ -181,17 +181,17 @@ export function WelcomeScreen({ onComplete }: { onComplete: () => void }) {
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -20 }}
-              className="bg-[#FDFBF7] border-2 border-[#2C2C2C] shadow-[12px_12px_0px_#D9D1C1] rounded-[40px] p-8 sm:p-10 relative overflow-hidden"
+              className="bg-page-bg border-2 border-[#2C2C2C] shadow-[12px_12px_0px_var(--shadow-color)] rounded-[40px] p-8 sm:p-10 relative overflow-hidden"
             >
               <button 
                 onClick={() => setStep(2)}
-                className="absolute top-6 left-6 p-2 hover:bg-[#F4F1EA] rounded-full transition-colors"
+                className="absolute top-6 left-6 p-2 hover:bg-cream rounded-full transition-colors"
               >
                 <ArrowLeft size={20} className="text-[#A0998E]" />
               </button>
 
               <div className="flex flex-col items-center mt-6 mb-4">
-                 <div className="w-16 h-16 bg-[#F4F1EA] rounded-2xl border-2 border-[#2C2C2C] flex items-center justify-center text-[#2C2C2C] mb-4 shadow-[4px_4px_0px_#D9D1C1]">
+                 <div className="w-16 h-16 bg-cream rounded-2xl border-2 border-[#2C2C2C] flex items-center justify-center text-[#2C2C2C] mb-4 shadow-[4px_4px_0px_var(--shadow-color)]">
                     <Lock size={32} />
                  </div>
                  <h2 className="text-2xl font-black italic text-[#2C2C2C]">Set a PIN</h2>
@@ -206,11 +206,11 @@ export function WelcomeScreen({ onComplete }: { onComplete: () => void }) {
 
               <div className="grid grid-cols-3 gap-3 mb-8">
                 {['1', '2', '3', '4', '5', '6', '7', '8', '9'].map(n => (
-                  <button key={n} onClick={() => handleKeyPress(n)} className="py-3 text-lg font-black bg-white border-2 border-[#2C2C2C] rounded-xl hover:bg-[#F4F1EA] active:translate-y-0.5 transition-all">{n}</button>
+                  <button key={n} onClick={() => handleKeyPress(n)} className="py-3 text-lg font-black bg-white border-2 border-[#2C2C2C] rounded-xl hover:bg-cream active:translate-y-0.5 transition-all">{n}</button>
                 ))}
                 <div />
-                <button onClick={() => handleKeyPress('0')} className="py-3 text-lg font-black bg-white border-2 border-[#2C2C2C] rounded-xl hover:bg-[#F4F1EA] active:translate-y-0.5 transition-all text-[#2C2C2C]">0</button>
-                <button onClick={handleBackspace} className="py-3 flex items-center justify-center bg-[#F4F1EA] border-2 border-[#2C2C2C] rounded-xl hover:bg-[#D9D1C1]/50 text-[#2C2C2C]"><X size={20} /></button>
+                <button onClick={() => handleKeyPress('0')} className="py-3 text-lg font-black bg-white border-2 border-[#2C2C2C] rounded-xl hover:bg-cream active:translate-y-0.5 transition-all text-[#2C2C2C]">0</button>
+                <button onClick={handleBackspace} className="py-3 flex items-center justify-center bg-cream border-2 border-[#2C2C2C] rounded-xl hover:bg-ink/10 text-[#2C2C2C]"><X size={20} /></button>
               </div>
 
               <button
