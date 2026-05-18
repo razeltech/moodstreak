@@ -15,11 +15,11 @@ export default defineConfig(({mode}) => {
         workbox: {
           maximumFileSizeToCacheInBytes: 5 * 1024 * 1024
         },
-        includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'mask-icon.svg'],
+        includeAssets: ['favicon.png', 'apple-touch-icon.png'],
         manifest: {
-          name: 'MoodStreak',
+          name: 'MoodStreak | Your Minimalist Digital Journal',
           short_name: 'MoodStreak',
-          description: 'A beautiful, offline-first personal diary and mood tracking PWA.',
+          description: 'MoodStreak is a premium, minimalist digital journal and mood tracker. Capture your thoughts with voice-to-text, digital ink, and beautiful customizable themes. Powered by RazelTech.',
           theme_color: '#F4F1EA',
           background_color: '#F4F1EA',
           display: 'standalone',
