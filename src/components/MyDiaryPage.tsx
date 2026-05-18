@@ -321,14 +321,11 @@ export function MyDiaryPage() {
     if (!isFitToScreen) return;
     const computeScale = () => {
       const vw = window.innerWidth;
-      if (vw >= 768) {
-        setPageScale(1);
-      } else {
-        // Add padding
-        const availableWidth = vw - 32;
-        const scale = Math.min(1, availableWidth / currentSize.width);
-        setPageScale(parseFloat(scale.toFixed(3)));
-      }
+      // Account for safe horizontal margins (120px for tablet/desktop sidebar, 32px for mobile)
+      const horizontalPadding = vw >= 768 ? 120 : 32;
+      const availableWidth = vw - horizontalPadding;
+      const scale = Math.min(1, availableWidth / currentSize.width);
+      setPageScale(parseFloat(scale.toFixed(3)));
     };
     computeScale();
     window.addEventListener('resize', computeScale);
@@ -1271,9 +1268,9 @@ export function MyDiaryPage() {
 
       {/* Main Workspace */}
       <div className={cn("flex-1 min-h-0 min-w-0 overflow-auto bg-stone-200/30 touch-auto sm:scroll-smooth custom-scrollbar")} style={{ WebkitOverflowScrolling: 'touch' }}>
-        <div className="w-full min-w-max min-h-max p-4 sm:p-8 pb-32 sm:pb-8">
+        <div className="w-full min-h-full p-4 sm:p-8 pb-32 sm:pb-8 flex flex-col justify-start">
           <div
-            className="mx-auto"
+            className="mx-auto shrink-0"
             style={{
               width: currentSize.width * pageScale,
               height: currentSize.height * pageScale
