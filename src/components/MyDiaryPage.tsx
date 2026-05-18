@@ -839,35 +839,17 @@ export function MyDiaryPage() {
               {/* Group 2: Elements */}
               <div className="flex flex-wrap items-center gap-0.5 justify-center bg-white/40 p-1 rounded-xl border border-white/20 shrink-0">
                 <div className="relative group/tt">
-                  <button onClick={() => setShowStickers(p => !p)} className={cn("p-2 rounded-lg transition-all", showStickers ? "text-white" : "text-stone-400 hover:bg-stone-100")}
+                  <button onClick={() => {
+                    setShowStickers(p => !p);
+                    setShowVoiceMenu(false);
+                    setShowMoods(false);
+                    setShowThemes(false);
+                    setShowPageConfig(false);
+                  }} className={cn("p-2 rounded-lg transition-all", showStickers ? "text-white" : "text-stone-400 hover:bg-stone-100")}
                     style={{ backgroundColor: showStickers ? 'var(--accent-color)' : undefined }}>
                     <Smile size={16} />
                   </button>
                   <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 px-2 py-1 bg-ink text-white text-[10px] font-bold rounded shadow-xl opacity-0 group-hover/tt:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-[120]">Stickers</div>
-
-                  <AnimatePresence>
-                    {showStickers && (
-                      <motion.div
-                        initial={{ opacity: 0, scale: 0.95, y: 10 }}
-                        animate={{ opacity: 1, scale: 1, y: 0 }}
-                        exit={{ opacity: 0, scale: 0.95, y: 10 }}
-                        className={cn("absolute top-[calc(100%+10px)] left-0 sm:left-auto sm:right-0 mt-2 shadow-2xl rounded-2xl p-4 z-[100] w-[280px] h-[350px] overflow-y-auto border", isDarkMode ? "bg-[#111216] border-stone-800" : "bg-white border-stone-200")}
-                      >
-                        <h3 className="text-xs font-bold uppercase tracking-widest mb-3 opacity-60">Stickers</h3>
-                        <div className="grid grid-cols-4 gap-2">
-                          {DECORATIVE_STICKERS.map(s => (
-                            <button
-                              key={s.id}
-                              onClick={() => addSticker(s.id)}
-                              className={cn("aspect-square p-2 rounded-lg transition-all flex items-center justify-center", isDarkMode ? "bg-stone-800 hover:bg-stone-700" : "bg-stone-50 hover:bg-stone-100")}
-                            >
-                              {s.component}
-                            </button>
-                          ))}
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
                 </div>
 
                 <div className="relative group/tt">
@@ -905,56 +887,20 @@ export function MyDiaryPage() {
 
                   <div className="relative group/tt">
                     <button
-                      onClick={(e) => { e.stopPropagation(); setShowVoiceMenu(!showVoiceMenu); }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setShowVoiceMenu(!showVoiceMenu);
+                        setShowStickers(false);
+                        setShowMoods(false);
+                        setShowThemes(false);
+                        setShowPageConfig(false);
+                      }}
                       className={cn("px-2 py-1.5 rounded-lg transition-all flex items-center gap-1 text-[10px] font-black uppercase", showVoiceMenu ? "bg-stone-800 text-white" : "text-stone-400 hover:bg-stone-100")}
                     >
                       <Globe size={12} />
                       <span>{speechLang.split('-')[0]}</span>
                       <ChevronDown size={10} className={cn("transition-transform duration-200", showVoiceMenu && "rotate-180")} />
                     </button>
-
-                    <AnimatePresence>
-                      {showVoiceMenu && (
-                        <motion.div
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, y: 10 }}
-                          className={cn("absolute top-full left-1/2 -translate-x-1/2 mt-2 shadow-2xl rounded-2xl p-2 z-[100] w-[140px] border flex flex-col gap-1 max-h-[250px] overflow-y-auto hide-scrollbar", isDarkMode ? "bg-[#111216] border-stone-800" : "bg-white border-stone-200")}
-                        >
-                          <div className="sticky top-0 bg-inherit pb-1 z-10 border-b border-stone-100 dark:border-stone-800">
-                            <h3 className="text-[10px] uppercase font-bold text-stone-400 mb-1 ml-2 tracking-widest mt-1">Language</h3>
-                          </div>
-                          {[
-                            { code: 'en-US', label: 'English' },
-                            { code: 'hi-IN', label: 'Hindi' },
-                            { code: 'te-IN', label: 'Telugu' },
-                            { code: 'ta-IN', label: 'Tamil' },
-                            { code: 'kn-IN', label: 'Kannada' },
-                            { code: 'ml-IN', label: 'Malayalam' },
-                            { code: 'mr-IN', label: 'Marathi' },
-                            { code: 'gu-IN', label: 'Gujarati' },
-                            { code: 'bn-IN', label: 'Bengali' },
-                            { code: 'es-ES', label: 'Español' },
-                            { code: 'fr-FR', label: 'Français' },
-                            { code: 'de-DE', label: 'Deutsch' },
-                            { code: 'it-IT', label: 'Italiano' },
-                            { code: 'ja-JP', label: '日本語' }
-                          ].map(lang => (
-                            <button
-                              key={lang.code}
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                setSpeechLang(lang.code);
-                                setShowVoiceMenu(false);
-                              }}
-                              className={cn("text-left text-sm px-3 py-2 rounded-lg transition-colors shrink-0", speechLang === lang.code ? "bg-stone-100 text-stone-900 font-bold" : "text-stone-500 hover:bg-stone-50")}
-                            >
-                              {lang.label}
-                            </button>
-                          ))}
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
                   </div>
                 </div>
               </div>
@@ -963,102 +909,50 @@ export function MyDiaryPage() {
               <div className="flex flex-wrap items-center gap-0.5 justify-center sm:justify-center bg-white/40 p-1 rounded-xl border border-white/20 shrink-0">
                 <div className="relative group/tt">
                   <button
-                    onClick={() => { setShowMoods(!showMoods); setShowThemes(false); setShowPageConfig(false); }}
+                    onClick={() => {
+                      setShowMoods(!showMoods);
+                      setShowThemes(false);
+                      setShowPageConfig(false);
+                      setShowStickers(false);
+                      setShowVoiceMenu(false);
+                    }}
                     className={cn("p-2 rounded-lg transition-all", showMoods ? "bg-stone-800 text-white" : "text-stone-400 hover:bg-stone-100")}
                   >
                     <span className="text-[14px] leading-none">{mood.label.split(' ')[1]}</span>
                   </button>
                   <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 px-2 py-1 bg-ink text-white text-[10px] font-bold rounded shadow-xl opacity-0 group-hover/tt:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-[120]">Mood</div>
-
-                  <AnimatePresence>
-                    {showMoods && (
-                      <motion.div
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: 10 }}
-                        className={cn("absolute top-full left-0 mt-2 shadow-2xl rounded-2xl p-4 z-[100] w-[240px] border grid grid-cols-5 gap-1", isDarkMode ? "bg-[#111216] border-stone-800" : "bg-white border-stone-200")}
-                      >
-                        {allMoods.map(m => (
-                          <button
-                            key={m.id}
-                            onClick={() => { setMood(m); setCustomColor(m.color); setShowMoods(false); }}
-                            className="text-xl p-2 rounded-lg hover:bg-stone-100 transition-transform active:scale-90"
-                            title={m.label}
-                          >
-                            {m.label.split(' ')[1]}
-                          </button>
-                        ))}
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
                 </div>
 
                 <div className="relative group/tt">
                   <button
-                    onClick={() => { setShowThemes(!showThemes); setShowMoods(false); setShowPageConfig(false); }}
+                    onClick={() => {
+                      setShowThemes(!showThemes);
+                      setShowMoods(false);
+                      setShowPageConfig(false);
+                      setShowStickers(false);
+                      setShowVoiceMenu(false);
+                    }}
                     className={cn("p-2 rounded-lg transition-all", showThemes ? "bg-stone-800 text-white" : "text-stone-400 hover:bg-stone-100")}
                   >
                     <Palette size={16} />
                   </button>
                   <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 px-2 py-1 bg-ink text-white text-[10px] font-bold rounded shadow-xl opacity-0 group-hover/tt:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-[120]">Themes</div>
-
-                  <AnimatePresence>
-                    {showThemes && (
-                      <motion.div
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: 10 }}
-                        className={cn("absolute top-full left-0 sm:left-auto sm:right-0 mt-2 shadow-2xl rounded-2xl p-3 z-[100] w-[200px] border flex flex-col gap-1", isDarkMode ? "bg-[#111216] border-stone-800" : "bg-white border-stone-200")}
-                      >
-                        {SCRAPBOOK_THEMES.map(theme => (
-                          <button
-                            key={theme.id}
-                            onClick={() => { setActiveTheme(theme); setShowThemes(false); }}
-                            className={cn("flex items-center gap-2 p-2 rounded-lg text-xs font-bold transition-all border text-left", activeTheme.id === theme.id ? "bg-stone-800 border-stone-700 text-white" : "border-transparent hover:bg-stone-50")}
-                          >
-                            <div className="w-3 h-3 rounded-full" style={{ backgroundColor: theme.colors.surface }} />
-                            <span className="truncate">{theme.name}</span>
-                          </button>
-                        ))}
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
                 </div>
 
                 <div className="relative group/tt">
                   <button
-                    onClick={() => { setShowPageConfig(!showPageConfig); setShowThemes(false); setShowMoods(false); }}
+                    onClick={() => {
+                      setShowPageConfig(!showPageConfig);
+                      setShowThemes(false);
+                      setShowMoods(false);
+                      setShowStickers(false);
+                      setShowVoiceMenu(false);
+                    }}
                     className={cn("p-2 rounded-lg transition-all", showPageConfig ? "bg-stone-800 text-white" : "text-stone-400 hover:bg-stone-100")}
                   >
                     <Cog size={16} />
                   </button>
                   <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 px-2 py-1 bg-ink text-white text-[10px] font-bold rounded shadow-xl opacity-0 group-hover/tt:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-[120]">Settings</div>
-
-                  <AnimatePresence>
-                    {showPageConfig && (
-                      <motion.div
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: 10 }}
-                        className={cn("absolute top-full right-0 mt-2 shadow-2xl rounded-2xl p-4 z-[100] w-56 border flex flex-col gap-4", isDarkMode ? "bg-[#111216] border-stone-800" : "bg-white border-stone-200")}
-                      >
-                        <div>
-                          <h3 className="text-[10px] font-bold uppercase tracking-widest mb-2 opacity-50">Grid Layout</h3>
-                          <div className="flex flex-wrap gap-1">
-                            {['blank', 'ruled', 'grid', 'dotted'].map(t => (
-                              <button key={t} onClick={() => setPageType(t as any)} className={cn("px-2 py-1 rounded text-[10px] font-bold border capitalize", pageType === t ? "bg-stone-800 text-white border-stone-800" : "border-stone-200")}>{t}</button>
-                            ))}
-                          </div>
-                        </div>
-                        <div>
-                          <h3 className="text-[10px] font-bold uppercase tracking-widest mb-2 opacity-50">Canvas Size</h3>
-                          <select value={pageSize} onChange={(e) => setPageSize(e.target.value as any)} className="w-full text-xs font-bold bg-stone-50 border border-stone-200 p-1 rounded">
-                            {Object.keys(PAGE_SIZES).map(s => <option key={s} value={s}>{s}</option>)}
-                          </select>
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
                 </div>
 
                 <div className="relative group/tt">
@@ -1114,10 +1008,146 @@ export function MyDiaryPage() {
                   <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 px-2 py-1 bg-ink text-white text-[10px] font-bold rounded shadow-xl opacity-0 group-hover/tt:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-[120]">Zoom In</div>
                 </div>
               </div>
-              {/* Symmetrical trailing spacing spacer to preserve ending padding on scroll */}
-              <div className="w-4 shrink-0 sm:hidden" />
             </div>
           </div>
+
+          {/* Submenus rendered outside the overflow-x-auto container to prevent vertical clipping on mobile */}
+          <AnimatePresence>
+            {showStickers && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95, y: 10 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.95, y: 10 }}
+                className={cn("absolute top-[calc(100%+10px)] left-1/2 -translate-x-1/2 sm:left-auto sm:right-[35%] sm:translate-x-0 mt-2 shadow-2xl rounded-2xl p-4 z-[100] w-[280px] h-[350px] overflow-y-auto border", isDarkMode ? "bg-[#111216] border-stone-800" : "bg-white border-stone-200")}
+              >
+                <h3 className="text-xs font-bold uppercase tracking-widest mb-3 opacity-60">Stickers</h3>
+                <div className="grid grid-cols-4 gap-2">
+                  {DECORATIVE_STICKERS.map(s => (
+                    <button
+                      key={s.id}
+                      onClick={() => addSticker(s.id)}
+                      className={cn("aspect-square p-2 rounded-lg transition-all flex items-center justify-center", isDarkMode ? "bg-stone-800 hover:bg-stone-700" : "bg-stone-50 hover:bg-stone-100")}
+                    >
+                      {s.component}
+                    </button>
+                  ))}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          <AnimatePresence>
+            {showVoiceMenu && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 10 }}
+                className={cn("absolute top-[calc(100%+10px)] left-[30%] sm:left-[35%] -translate-x-1/2 mt-2 shadow-2xl rounded-2xl p-2 z-[100] w-[140px] border flex flex-col gap-1 max-h-[250px] overflow-y-auto hide-scrollbar", isDarkMode ? "bg-[#111216] border-stone-800" : "bg-white border-stone-200")}
+              >
+                <div className="sticky top-0 bg-inherit pb-1 z-10 border-b border-stone-100 dark:border-stone-800">
+                  <h3 className="text-[10px] uppercase font-bold text-stone-400 mb-1 ml-2 tracking-widest mt-1">Language</h3>
+                </div>
+                {[
+                  { code: 'en-US', label: 'English' },
+                  { code: 'hi-IN', label: 'Hindi' },
+                  { code: 'te-IN', label: 'Telugu' },
+                  { code: 'ta-IN', label: 'Tamil' },
+                  { code: 'kn-IN', label: 'Kannada' },
+                  { code: 'ml-IN', label: 'Malayalam' },
+                  { code: 'mr-IN', label: 'Marathi' },
+                  { code: 'gu-IN', label: 'Gujarati' },
+                  { code: 'bn-IN', label: 'Bengali' },
+                  { code: 'es-ES', label: 'Español' },
+                  { code: 'fr-FR', label: 'Français' },
+                  { code: 'de-DE', label: 'Deutsch' },
+                  { code: 'it-IT', label: 'Italiano' },
+                  { code: 'ja-JP', label: '日本語' }
+                ].map(lang => (
+                  <button
+                    key={lang.code}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSpeechLang(lang.code);
+                      setShowVoiceMenu(false);
+                    }}
+                    className={cn("text-left text-sm px-3 py-2 rounded-lg transition-colors shrink-0", speechLang === lang.code ? "bg-stone-100 text-stone-900 font-bold" : "text-stone-500 hover:bg-stone-50")}
+                  >
+                    {lang.label}
+                  </button>
+                ))}
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          <AnimatePresence>
+            {showMoods && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 10 }}
+                className={cn("absolute top-[calc(100%+10px)] left-[50%] sm:left-[55%] -translate-x-1/2 mt-2 shadow-2xl rounded-2xl p-4 z-[100] w-[240px] border grid grid-cols-5 gap-1", isDarkMode ? "bg-[#111216] border-stone-800" : "bg-white border-stone-200")}
+              >
+                {allMoods.map(m => (
+                  <button
+                    key={m.id}
+                    onClick={() => { setMood(m); setCustomColor(m.color); setShowMoods(false); }}
+                    className="text-xl p-2 rounded-lg hover:bg-stone-100 transition-transform active:scale-90"
+                    title={m.label}
+                  >
+                    {m.label.split(' ')[1]}
+                  </button>
+                ))}
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          <AnimatePresence>
+            {showThemes && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 10 }}
+                className={cn("absolute top-[calc(100%+10px)] left-[60%] sm:left-[63%] -translate-x-1/2 mt-2 shadow-2xl rounded-2xl p-3 z-[100] w-[200px] border flex flex-col gap-1", isDarkMode ? "bg-[#111216] border-stone-800" : "bg-white border-stone-200")}
+              >
+                {SCRAPBOOK_THEMES.map(theme => (
+                  <button
+                    key={theme.id}
+                    onClick={() => { setActiveTheme(theme); setShowThemes(false); }}
+                    className={cn("flex items-center gap-2 p-2 rounded-lg text-xs font-bold transition-all border text-left", activeTheme.id === theme.id ? "bg-stone-800 border-stone-700 text-white" : "border-transparent hover:bg-stone-50")}
+                  >
+                    <div className="w-3 h-3 rounded-full" style={{ backgroundColor: theme.colors.surface }} />
+                    <span className="truncate">{theme.name}</span>
+                  </button>
+                ))}
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          <AnimatePresence>
+            {showPageConfig && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 10 }}
+                className={cn("absolute top-[calc(100%+10px)] right-4 sm:right-[15%] mt-2 shadow-2xl rounded-2xl p-4 z-[100] w-56 border flex flex-col gap-4", isDarkMode ? "bg-[#111216] border-stone-800" : "bg-white border-stone-200")}
+              >
+                <div>
+                  <h3 className="text-[10px] font-bold uppercase tracking-widest mb-2 opacity-50">Grid Layout</h3>
+                  <div className="flex flex-wrap gap-1">
+                    {['blank', 'ruled', 'grid', 'dotted'].map(t => (
+                      <button key={t} onClick={() => setPageType(t as any)} className={cn("px-2 py-1 rounded text-[10px] font-bold border capitalize", pageType === t ? "bg-stone-800 text-white border-stone-800" : "border-stone-200")}>{t}</button>
+                    ))}
+                  </div>
+                </div>
+                <div>
+                  <h3 className="text-[10px] font-bold uppercase tracking-widest mb-2 opacity-50">Canvas Size</h3>
+                  <select value={pageSize} onChange={(e) => setPageSize(e.target.value as any)} className="w-full text-xs font-bold bg-stone-50 border border-stone-200 p-1 rounded">
+                    {Object.keys(PAGE_SIZES).map(s => <option key={s} value={s}>{s}</option>)}
+                  </select>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </div>
 
