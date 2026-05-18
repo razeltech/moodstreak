@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { Mic, MicOff, PenTool, Eraser, Type, Download, Maximize, FileText, PlusSquare, Trash2, GripHorizontal, X, Bold, Italic, Highlighter, AlignLeft, AlignCenter, AlignRight, AlignJustify, List, ListOrdered, Underline as UnderlineIcon, Trash, Star, Image as ImageIcon, ImagePlus, Sun, Moon, Palette, Smile, Cog, ChevronLeft, ChevronRight, Plus, Save, Check, Hand, ZoomIn, ZoomOut } from 'lucide-react';
+import { Mic, MicOff, PenTool, Eraser, Type, Download, Maximize, FileText, PlusSquare, Trash2, GripHorizontal, X, Bold, Italic, Highlighter, AlignLeft, AlignCenter, AlignRight, AlignJustify, List, ListOrdered, Underline as UnderlineIcon, Trash, Star, Image as ImageIcon, ImagePlus, Sun, Moon, Palette, Smile, Cog, ChevronLeft, ChevronRight, Plus, Save, Check, Hand, ZoomIn, ZoomOut, Globe, ChevronDown } from 'lucide-react';
 import { ReactSketchCanvas, type ReactSketchCanvasRef } from 'react-sketch-canvas';
 import { cn } from '../lib/utils';
 import { AnimatePresence, motion } from 'motion/react';
@@ -888,52 +888,74 @@ export function MyDiaryPage() {
                   <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 px-2 py-1 bg-ink text-white text-[10px] font-bold rounded shadow-xl opacity-0 group-hover/tt:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-[120]">Photo</div>
                 </div>
 
-                <div className="relative group/tt">
-                  <div className="flex bg-white/40 rounded-lg p-0.5" style={{ backgroundColor: showVoiceMenu ? 'var(--accent-color)' : undefined }}>
-                    <button onClick={toggleVoice} className={cn("p-2 rounded-lg transition-all", isListening ? "bg-red-500 text-white animate-pulse" : (showVoiceMenu ? "text-white" : "text-stone-400 hover:bg-stone-100"))}>
+                {/* Group 2: Voice Recognition */}
+                <div className="flex items-center gap-1 bg-white/40 p-1 rounded-xl border border-white/20 shrink-0">
+                  <div className="relative group/tt">
+                    <button
+                      onClick={toggleVoice}
+                      className={cn("p-2 rounded-lg transition-all", isListening ? "bg-red-500 text-white animate-pulse" : "text-stone-400 hover:bg-stone-100")}
+                      title="Toggle voice typing"
+                    >
                       {isListening ? <Mic size={16} /> : <MicOff size={16} />}
                     </button>
-                    <button onClick={() => setShowVoiceMenu(!showVoiceMenu)} className={cn("px-1 flex flex-col items-center justify-center rounded-lg transition-all text-[8px] font-black uppercase text-stone-400 hover:bg-stone-100", showVoiceMenu && "text-white hover:bg-white/20")}>
-                      {speechLang.split('-')[0]}
-                    </button>
+                    <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 px-2 py-1 bg-ink text-white text-[10px] font-bold rounded shadow-xl opacity-0 group-hover/tt:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-[120]">
+                      {isListening ? 'Stop Listening' : 'Voice Typing'}
+                    </div>
                   </div>
-                  {!showVoiceMenu && <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 px-2 py-1 bg-ink text-white text-[10px] font-bold rounded shadow-xl opacity-0 group-hover/tt:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-[120]">Voice & Lang</div>}
 
-                  <AnimatePresence>
-                    {showVoiceMenu && (
-                      <motion.div
-                        className={cn("absolute top-full left-1/2 -translate-x-1/2 mt-2 shadow-2xl rounded-2xl p-2 z-[100] w-[140px] border flex flex-col gap-1 max-h-[250px] overflow-y-auto hide-scrollbar", isDarkMode ? "bg-[#111216] border-stone-800" : "bg-white border-stone-200")}
-                      >
-                        <div className="sticky top-0 bg-inherit pb-1 z-10">
-                          <h3 className="text-[10px] uppercase font-bold text-stone-400 mb-1 ml-2 tracking-widest mt-1">Language</h3>
-                        </div>
-                        {[
-                          { code: 'en-US', label: 'English' },
-                          { code: 'hi-IN', label: 'Hindi' },
-                          { code: 'te-IN', label: 'Telugu' },
-                          { code: 'ta-IN', label: 'Tamil' },
-                          { code: 'kn-IN', label: 'Kannada' },
-                          { code: 'ml-IN', label: 'Malayalam' },
-                          { code: 'mr-IN', label: 'Marathi' },
-                          { code: 'gu-IN', label: 'Gujarati' },
-                          { code: 'bn-IN', label: 'Bengali' },
-                          { code: 'es-ES', label: 'Español' },
-                          { code: 'fr-FR', label: 'Français' },
-                          { code: 'de-DE', label: 'Deutsch' },
-                          { code: 'it-IT', label: 'Italiano' },
-                          { code: 'ja-JP', label: '日本語' }
-                        ].map(lang => (
-                          <button
-                            key={lang.code}
-                            onClick={() => { setSpeechLang(lang.code); setShowVoiceMenu(false); }}
-                            className={cn("text-left text-sm px-3 py-2 rounded-lg transition-colors shrink-0", speechLang === lang.code ? "bg-stone-100 text-stone-900 font-bold" : "text-stone-500 hover:bg-stone-50")}
-                          >
-                            {lang.label}
-                          </button>
-                        ))}
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
+                  <div className="relative group/tt">
+                    <button
+                      onClick={(e) => { e.stopPropagation(); setShowVoiceMenu(!showVoiceMenu); }}
+                      className={cn("px-2 py-1.5 rounded-lg transition-all flex items-center gap-1 text-[10px] font-black uppercase", showVoiceMenu ? "bg-stone-800 text-white" : "text-stone-400 hover:bg-stone-100")}
+                    >
+                      <Globe size={12} />
+                      <span>{speechLang.split('-')[0]}</span>
+                      <ChevronDown size={10} className={cn("transition-transform duration-200", showVoiceMenu && "rotate-180")} />
+                    </button>
+
+                    <AnimatePresence>
+                      {showVoiceMenu && (
+                        <motion.div
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: 10 }}
+                          className={cn("absolute top-full left-1/2 -translate-x-1/2 mt-2 shadow-2xl rounded-2xl p-2 z-[100] w-[140px] border flex flex-col gap-1 max-h-[250px] overflow-y-auto hide-scrollbar", isDarkMode ? "bg-[#111216] border-stone-800" : "bg-white border-stone-200")}
+                        >
+                          <div className="sticky top-0 bg-inherit pb-1 z-10 border-b border-stone-100 dark:border-stone-800">
+                            <h3 className="text-[10px] uppercase font-bold text-stone-400 mb-1 ml-2 tracking-widest mt-1">Language</h3>
+                          </div>
+                          {[
+                            { code: 'en-US', label: 'English' },
+                            { code: 'hi-IN', label: 'Hindi' },
+                            { code: 'te-IN', label: 'Telugu' },
+                            { code: 'ta-IN', label: 'Tamil' },
+                            { code: 'kn-IN', label: 'Kannada' },
+                            { code: 'ml-IN', label: 'Malayalam' },
+                            { code: 'mr-IN', label: 'Marathi' },
+                            { code: 'gu-IN', label: 'Gujarati' },
+                            { code: 'bn-IN', label: 'Bengali' },
+                            { code: 'es-ES', label: 'Español' },
+                            { code: 'fr-FR', label: 'Français' },
+                            { code: 'de-DE', label: 'Deutsch' },
+                            { code: 'it-IT', label: 'Italiano' },
+                            { code: 'ja-JP', label: '日本語' }
+                          ].map(lang => (
+                            <button
+                              key={lang.code}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setSpeechLang(lang.code);
+                                setShowVoiceMenu(false);
+                              }}
+                              className={cn("text-left text-sm px-3 py-2 rounded-lg transition-colors shrink-0", speechLang === lang.code ? "bg-stone-100 text-stone-900 font-bold" : "text-stone-500 hover:bg-stone-50")}
+                            >
+                              {lang.label}
+                            </button>
+                          ))}
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
                 </div>
               </div>
 
@@ -1092,6 +1114,8 @@ export function MyDiaryPage() {
                   <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 px-2 py-1 bg-ink text-white text-[10px] font-bold rounded shadow-xl opacity-0 group-hover/tt:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-[120]">Zoom In</div>
                 </div>
               </div>
+              {/* Symmetrical trailing spacing spacer to preserve ending padding on scroll */}
+              <div className="w-4 shrink-0 sm:hidden" />
             </div>
           </div>
         </div>
@@ -1260,7 +1284,8 @@ export function MyDiaryPage() {
                   </button>
                 </div>
               )}
-
+              {/* Symmetrical trailing spacing spacer to preserve ending padding on scroll */}
+              <div className="w-4 shrink-0 sm:hidden" />
             </div>
           </motion.div>
         )}
