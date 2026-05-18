@@ -4,7 +4,7 @@ import { Lock, Unlock, Hash, X } from 'lucide-react';
 import { db } from '../db/db';
 import { useLiveQuery } from 'dexie-react-hooks';
 
-export function PinLock({ onSuccess }: { onSuccess: () => void }) {
+export const PinLock: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) => {
   const settings = useLiveQuery(() => db.settings.get(1));
   const [pin, setPin] = React.useState('');
   const [error, setError] = React.useState(false);
@@ -35,14 +35,14 @@ export function PinLock({ onSuccess }: { onSuccess: () => void }) {
   if (!settings?.pinHash) return null;
 
   return (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       className="fixed inset-0 bg-cream z-[999] flex flex-col items-center justify-center p-6"
     >
       <div className="w-full max-w-xs flex flex-col items-center">
-        <motion.div 
+        <motion.div
           animate={error ? { x: [-10, 10, -10, 10, 0] } : {}}
           transition={{ duration: 0.4 }}
           className="w-20 h-20 bg-white border border-[var(--border-color)] rounded-[30px] shadow-sm flex items-center justify-center mb-8"
@@ -56,11 +56,10 @@ export function PinLock({ onSuccess }: { onSuccess: () => void }) {
         {/* Pin Dots */}
         <div className="flex gap-4 mb-12">
           {[0, 1, 2, 3].map(i => (
-            <div 
-              key={i} 
-              className={`w-4 h-4 rounded-full border border-[var(--border-color)] transition-all duration-300 ${
-                pin.length > i ? 'bg-ink scale-110' : 'bg-transparent'
-              }`} 
+            <div
+              key={i}
+              className={`w-4 h-4 rounded-full border border-[var(--border-color)] transition-all duration-300 ${pin.length > i ? 'bg-ink scale-110' : 'bg-transparent'
+                }`}
             />
           ))}
         </div>

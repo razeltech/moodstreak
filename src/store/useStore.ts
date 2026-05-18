@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { format } from 'date-fns';
 
-type TabType = 'journal' | 'mood-grid' | 'planner' | 'settings' | 'export' | 'dashboard' | 'today';
+type TabType = 'journal' | 'mood-grid' | 'planner' | 'settings' | 'export' | 'dashboard' | 'today' | 'vault';
 
 interface AppState {
   currentDate: Date;
@@ -35,7 +35,7 @@ export const useStore = create<AppState>((set, get) => ({
   selectedMood: null,
   pageWidth: 800,
   pageHeight: 600,
-  
+
   setCurrentDate: (date) => set({ currentDate: date }),
   setActiveTab: (tab) => set({ activeTab: tab }),
   setDrawingMode: (isDrawing) => set({ isDrawingMode: isDrawing }),
